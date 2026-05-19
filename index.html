@@ -1,208 +1,1920 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kinjo Allergy Search 2026</title>
-<style>
-:root { --bg:#f6f7fb; --card:#fff; --text:#1f2937; --muted:#6b7280; --dark:#111827; --danger:#dc2626; }
-* { box-sizing:border-box; }
-body { margin:0; font-family: Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); }
-header { background:linear-gradient(135deg,#111827,#374151); color:white; padding:22px 16px; text-align:center; }
-header h1 { margin:0 0 6px; font-size:26px; }
-header p { margin:0; opacity:.9; }
-.container { max-width:1200px; margin:auto; padding:18px; }
-.search-wrap { background:white; padding:14px; border-radius:16px; box-shadow:0 4px 14px rgba(0,0,0,.07); margin-bottom:14px; }
-.search-box { width:100%; padding:15px 16px; font-size:18px; border:2px solid #e5e7eb; border-radius:12px; outline:none; }
-.search-box:focus { border-color:#111827; }
-.help { color:var(--muted); font-size:13px; margin-top:8px; }
-.filters { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0; }
-.filter-btn { padding:9px 13px; border:1px solid #d1d5db; background:white; border-radius:999px; cursor:pointer; font-size:14px; }
-.filter-btn.active { background:#111827; color:white; border-color:#111827; }
-.clear-btn { padding:9px 16px; border:none; background:#dc2626; color:white; border-radius:999px; cursor:pointer; font-size:14px; font-weight:700; box-shadow:0 3px 8px rgba(220,38,38,.25); }
-.clear-btn:hover { background:#b91c1c; }
-.result-count { margin:12px 0; font-weight:700; color:#374151; }
-.card { background:var(--card); border-radius:16px; padding:16px; margin-bottom:12px; box-shadow:0 3px 12px rgba(0,0,0,.07); border-left:6px solid #111827; }
-.menu-name { font-size:21px; font-weight:800; margin-bottom:10px; }
-.row { margin:10px 0; }
-.sauce-allergy-row { background:#eef6ff; border:1px solid #bfdbfe; border-radius:12px; padding:10px; }
-.sauce-tag { border:2px solid rgba(37,99,235,.35); box-shadow:0 1px 3px rgba(37,99,235,.12); }
-.exact-match-badge { display:inline-block; margin-left:8px; padding:3px 8px; border-radius:999px; background:#dcfce7; color:#166534; font-size:12px; font-weight:800; vertical-align:middle; }
-.label { display:block; font-weight:800; color:#4b5563; margin-bottom:5px; }
-.warning { background:#fff7ed; border:1px solid #fed7aa; padding:10px; border-radius:12px; margin-top:10px; }
-.allergy-tag { display:inline-block; padding:5px 9px; margin:3px 4px 3px 0; border-radius:999px; font-size:13px; font-weight:700; }
-.tag-wheat,.tag-gluten { background:#fed7aa; color:#7c2d12; }
-.tag-egg { background:#fef08a; color:#713f12; }
-.tag-dairy { background:#bfdbfe; color:#1e3a8a; }
-.tag-soy { background:#bbf7d0; color:#14532d; }
-.tag-seafood { background:#bae6fd; color:#075985; }
-.tag-shellfish { background:#99f6e4; color:#134e4a; }
-.tag-fish { background:#cffafe; color:#155e75; }
-.tag-sesame { background:#e7e5e4; color:#44403c; }
-.tag-peanut { background:#fecaca; color:#7f1d1d; }
-.tag-tree-nut { background:#ddd6fe; color:#4c1d95; }
-.tag-alcohol { background:#fbcfe8; color:#831843; }
-.tag-lemon,.tag-fruit { background:#fecdd3; color:#881337; }
-.tag-mustard { background:#fde68a; color:#78350f; }
-.tag-sulphite { background:#e9d5ff; color:#581c87; }
-.tag-default { background:#f3f4f6; color:#374151; }
-.source-page { color:#9ca3af; font-size:12px; margin-top:10px; }
-.no-result { text-align:center; padding:36px; color:#777; font-size:18px; background:white; border-radius:16px; }
-@media (max-width:640px) { header h1{font-size:22px} .container{padding:12px} .search-box{font-size:16px} .menu-name{font-size:19px} }
-</style>
-</head>
-<body>
-<header><h1>Kinjo Allergy Information 2026</h1><p>Search by menu item, keyword, sauce, or allergy</p></header>
-<div class="container">
-  <div class="search-wrap">
-    <input type="text" id="searchInput" class="search-box" placeholder="Search: pasta, salmon, egg, dairy, seafood, alcohol, wheat..." />
-    <div class="help">Keyword search works with partial words. Example: type <b>pasta</b>, <b>salmon</b>, <b>volcano</b>, <b>tree nut</b>, or <b>shellfish</b>.</div>
-  </div>
-  <div class="filters">
-    <button class="filter-btn" onclick="filterByAllergy('Wheat')">Wheat / Gluten</button>
-    <button class="filter-btn" onclick="filterByAllergy('Egg')">Egg</button>
-    <button class="filter-btn" onclick="filterByAllergy('Dairy')">Dairy</button>
-    <button class="filter-btn" onclick="filterByAllergy('Soy')">Soy</button>
-    <button class="filter-btn" onclick="filterByAllergy('Seafood')">Seafood</button>
-    <button class="filter-btn" onclick="filterByAllergy('Shellfish')">Shellfish</button>
-    <button class="filter-btn" onclick="filterByAllergy('Fish')">Fish</button>
-    <button class="filter-btn" onclick="filterByAllergy('Sesame')">Sesame</button>
-    <button class="filter-btn" onclick="filterByAllergy('Peanut')">Peanut</button>
-    <button class="filter-btn" onclick="filterByAllergy('Tree nut')">Tree Nut</button>
-    <button class="filter-btn" onclick="filterByAllergy('Alcohol')">Alcohol</button>
-    <button class="filter-btn" onclick="filterByAllergy('Lemon')">Lemon</button>
-    <button class="filter-btn" onclick="filterByAllergy('Fruit')">Fruit</button>
-    <button class="filter-btn" onclick="filterByAllergy('Mustard')">Mustard</button>
-    <button class="filter-btn" onclick="filterByAllergy('Sulphite')">Sulphite</button>
-    <button class="clear-btn" onclick="clearFilters()">Clear Search</button>
-  </div>
-  <div id="resultCount" class="result-count"></div>
-  <div id="results"></div>
-</div>
-<script>
-const allergyData = [{"menu": "Asparagus Tempura", "allergy": "Wheat, Seafood(Fish), Alcohol, Soy", "sauce": "Tempura Sauce", "sauceAllergy": "Wheat, Seafood(Fish), Alcohol, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 1}, {"menu": "Avocado Tempura", "allergy": "Wheat, Alcohol, Sugar, Soy, Sesame Seed", "sauce": "Unagi Sauce", "sauceAllergy": "Wheat, Alcohol, Sugar, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 1}, {"menu": "Agedashi Tofu", "allergy": "Wheat, Seafood(Fish), Alcohol, Soy", "sauce": "Tempura Sauce", "sauceAllergy": "Wheat, Seafood(Fish), Alcohol, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 1}, {"menu": "Avocado Roll", "allergy": "Avocado, Sesame Seed, Seaweed, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "Soy", "page": 1}, {"menu": "Broccolini", "allergy": "Wheat, Seafood(Shellfish), Sesame seed, Alcohol, Soy", "sauce": "Garlic Sauce", "sauceAllergy": "Wheat, Seafood(Shellfish), Sesame seed, Alcohol, Soy", "mayContain": "", "page": 2}, {"menu": "Broccoli Tempura", "allergy": "Wheat, Seafood(Fish), Alcohol, Soy", "sauce": "Tempura Sauce", "sauceAllergy": "Wheat, Seafood(Fish), Alcohol, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 2}, {"menu": "Black Ramen (Regular)", "allergy": "Wheat, Egg, Alcohol, Pork, Sesame Seed, Seaweed, Fruit(Apple), Sugar, Soy", "sauce": "Deluxe ; Mini", "sauceAllergy": "Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) Egg, Seafood(Fish), Corn ; Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy)", "mayContain": "Chashu : Pork, Sugar, Soy, Wheat Tree nut, Seafood(Shellfish)", "page": 2}, {"menu": "Benihana Roll", "allergy": "Wheat, Seafood(Fish), Soy, Seaweed, Tobiko, Alcohol, Egg", "sauce": "Sushi Rice ; Volcano Sauce ; Unagi Sauce ; Tobiko ; Sriracha", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Alcohol, Sugar, Soy ; Wheat, Seafood(Fish), Soy ; Pepper", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 2}, {"menu": "Beef Tataki", "allergy": "", "sauce": "Ponzu Sauce", "sauceAllergy": "Wheat, Fruit(Yuzu), Soy", "mayContain": "Wheat, Dairy, Seafood(Shellfish, Fish)", "page": 2}, {"menu": "Bolognese Pasta", "allergy": "Wheat, Alcohol, Dairy, Pork, Soy, Tomato", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 2}, {"menu": "Bacon Cream Pasta", "allergy": "Wheat, Seafood(Shellfish), Dairy, Pork", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 2}, {"menu": "Chicken Fried Rice", "allergy": "Wheat, Dairy, Egg, Sesame oil, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 3}, {"menu": "Chicken Yakitori", "allergy": "Wheat, Alcohol, Soy", "sauce": "Teriyaki sauce", "sauceAllergy": "Wheat, Alcohol, Soy", "mayContain": "", "page": 3}, {"menu": "Calamari Tempura", "allergy": "Wheat, Seafood(Shellfish, Fish), Egg", "sauce": "Volcano Sauce", "sauceAllergy": "Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 3}, {"menu": "Chicken Karaage", "allergy": "Wheat, Soy, Egg", "sauce": "Volcano Sauce", "sauceAllergy": "Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 3}, {"menu": "Chicken Katsu", "allergy": "Wheat, Palm Oil, Cane Sugar, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 3}, {"menu": "Chashu", "allergy": "Wheat, Pork, Sugar, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "Peanut, Seafood(Shellfish)", "page": 3}, {"menu": "Chashu Donburi", "allergy": "Wheat, Pork, Seafood(Fish), Alcohol, Sugar, Soy", "sauce": "Donburi Sauce", "sauceAllergy": "Wheat, Seafood(Fish), Alcohol, Sugar, Soy", "mayContain": "peanut, Seafood(Shellfish)", "page": 3}, {"menu": "Cucumer Roll", "allergy": "Cucumber, Sesame Seed, Seaweed, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "Soy", "page": 3}, {"menu": "Cream Corn Croquette", "allergy": "Wheat, Dairy, Soy, Pork", "sauce": "Takoyaki Sauce", "sauceAllergy": "Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 3}, {"menu": "California Roll", "allergy": "Avocado, Crabmeat Mix(Wheat, Seafood(Shellfish, Fish), Mayo, Seaweed, Soy, Sesame Seed, Alcohol", "sauce": "Sushi Rice ; Crab Meat ; Mayo", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Seafood(Shellfish, Fish) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "", "page": 3}, {"menu": "Cowboy Oshizushi", "allergy": "Wheat, Alcohol, Soy", "sauce": "Sushi Rice ; Teriyaki sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 3}, {"menu": "Crunchy Ahi Oshizushi", "allergy": "Wheat, Seafood(Fish), Alcohol, Soy", "sauce": "Sushi Rice ; Spicy Unagi Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 3}, {"menu": "Donut Fries (Funnel Fries)", "allergy": "Wheat, Soy, Egg, Dairy", "sauce": "Raspnerry Syrup ; Cinnamon Powder ; Sugar Powder", "sauceAllergy": "Sugar, Raspberry, Apple Powder ; Cinnamon, Sunflowder Oil ; Sugar", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 4}, {"menu": "Dynamite Roll", "allergy": "Wheat, Seafood(Shellfish), Avocado, Sesame Seed, Seaweed, Soy Masago, Alcohol, Egg", "sauce": "Sushi Rice ; Mayo ; Masago", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 4}, {"menu": "Deluxe Sashimi", "allergy": "Seafood(Shellfish, Fish), Wheat, Egg, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 4}, {"menu": "Edamame", "allergy": "Soybean", "sauce": "Salt", "sauceAllergy": "", "mayContain": "Wheat", "page": 5}, {"menu": "Ebi Sushi", "allergy": "Seafood(Shellfish), Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 5}, {"menu": "Fukujin Zuke", "allergy": "", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 6}, {"menu": "Female Dragon Roll", "allergy": "Wheat, Seafood(Shellfish, Fish), Avocado, Soy, Seaweed, Tobiko, Egg, Alcohol", "sauce": "Sushi Rice ; Mayo ; Volcano Sauce ; Ikura", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 6}, {"menu": "Grilled Salmon", "allergy": "Wheat, Seafood(Fish), Alcohol, Soy", "sauce": "Teriyaki Sauce", "sauceAllergy": "Wheat, Alcohol, Soy", "mayContain": "Dairy", "page": 7}, {"menu": "Grilled Shrimp", "allergy": "Wheat, Seafood(Shellish), Egg, Alcohol, Soy", "sauce": "Seafood Sauce", "sauceAllergy": "Egg, Alcohol, Soy", "mayContain": "Dairy", "page": 7}, {"menu": "Grilled Scallop", "allergy": "Wheat, Seafood(Shellish), Egg, Alcohol, Soy", "sauce": "Seafood Sauce", "sauceAllergy": "Egg, Alcohol, Soy", "mayContain": "Dairy", "page": 7}, {"menu": "Gomae", "allergy": "Wheat, Sesame seed, Seafood(Fish)", "sauce": "Goma Sauce", "sauceAllergy": "Sesame seed, Fish sauce", "mayContain": "", "page": 7}, {"menu": "Ginger Beef", "allergy": "Wheat, Egg, Pepper, Sesame Seed", "sauce": "Ginger Sauce", "sauceAllergy": "Fruit(Mango), Sugar, Chilli, Corn Starch", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 7}, {"menu": "Ginger Shrimp", "allergy": "Wheat, Seafood(Fish)", "sauce": "Ginger Sauce", "sauceAllergy": "Fruit(Mango), Sugar, Chilli, Corn Starch", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 7}, {"menu": "Gochujang Mix", "allergy": "Wheat, Sesame oil, Alcohol, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 7}, {"menu": "Golden Dragon Roll", "allergy": "Wheat, Seafood(Shellfish, Fish), Seaweed, Soy, Dairy, Alcohol, Crunch", "sauce": "Sushi Rice ; Unagi Sauce ; Crunch ; Sriracha", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy ; Wheat, Sesame Seed, Dairy, Seaweed, Fruit(Orange Peel) ; Pepper", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 7}, {"menu": "Gyu (Steak) Sushi", "allergy": "", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "Wheat, Dairy, Seafood(Shellfish, Fish), Alcohol", "page": 7}, {"menu": "Green Salad", "allergy": "Avocado, Egg", "sauce": "Salad Dressing ; Seaweed Salad ; Lobster Mix", "sauceAllergy": "Egg, Sesame Seed, Seaweed, Soy, Fruit(Orange) ; Sesame Seed, Soy, Sesame Oil, Sugar, Alcohol ; Seafood(Shellfish), Seaweed, Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "", "page": 7}, {"menu": "Golden Crispy", "allergy": "Wheat, Sesame Seed, Seafood(Fish), Mustard", "sauce": "Spicy BBQ Sauce ; Honey Mustard Sauce ; Sweet Chili Sauce ; Soy Garlic Sauce", "sauceAllergy": "Wheat, Seafood(Fish), Soy, Dairy, May contain Egg, Seafood(Shelfish), Peanut ; Mustard, Tomato, Egg, Soy ; Wheat, Soy, Alcohol, May contain Sesame Seed, Seafood(Fish), Dairy ; Soy, May contain Sesame Seed, Wheat, Seafood(Fish), Dairy", "mayContain": "", "page": 7}, {"menu": "Hash Brown", "allergy": "Potato, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 8}, {"menu": "Hot California Roll", "allergy": "Wheat, Avocado, Crabmeat Mix(Wheat, Seafood(Shellfish, Fish), Mayo, Alcohol, Seaweed, Sesame Seed, Soy", "sauce": "Sushi Rice ; Crab Meat ; Mayo", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Seafood(Shellfish, Fish) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 8}, {"menu": "Hot Beef Roll", "allergy": "Wheat, Dairy, Egg, Alcohol, Seaweed, Sesame seed, Soy", "sauce": "Sushi Rice ; Unagi Sauce ; Steak Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy ; Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 8}, {"menu": "Hanabi Oshizushi", "allergy": "Seafood(Fish), Avocado, Alcohol, Egg, Soy", "sauce": "Sushi Rice ; Mayo", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "", "page": 8}, {"menu": "Hamachi Sushi", "allergy": "Seafood(Fish), Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 8}, {"menu": "Ikayaki", "allergy": "Wheat, Alcohol, Egg", "sauce": "Teriyaki sauce ; Volcano Sauce", "sauceAllergy": "Wheat, Alcohol, Soy ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 9}, {"menu": "Inari (Bean Cake) sushi", "allergy": "Wheat, Soy, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 9}, {"menu": "Ikura Sushi", "allergy": "Wheat, Seafood(Fish), Seaweed, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 9}, {"menu": "Jay-Mak Roll", "allergy": "Seafood(Fish), Avocado, Seaweed, Wonton Skin, Soy Alcohol, Mayo, Wheat", "sauce": "Sushi Rice ; Chili Volcano Sauce ; Unagi Sauce ; Wonton Skin", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard, Sesame Seed ; Wheat, Alcohol, Sugar, Soy ; Wheat, Egg", "mayContain": "Wonton Seafood(Shellfish, Fish), Dairy", "page": 10}, {"menu": "Kinjo Fries", "allergy": "Wheat, Soy, Potato", "sauce": "Ketchup", "sauceAllergy": "Tomato, Sugar, Vinegar", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 11}, {"menu": "Kakiage", "allergy": "Wheat, Soy, Alcohol", "sauce": "Tempura Sauce", "sauceAllergy": "Wheat, Seafood(Fish), Alcohol, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy, Sesame Seed, Egg", "page": 11}, {"menu": "Karaage Donburi", "allergy": "Wheat, Soy, Alcohol, Egg", "sauce": "Volcano Sauce ; Donburi Sauce", "sauceAllergy": "Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Alcohol, Sugar, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy, Sesame Seed, Egg", "page": 11}, {"menu": "Kimchi", "allergy": "Seafood(Shellfish)", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 11}, {"menu": "Kawari Oshizushi", "allergy": "Seafood(Fish), Avocado, Soy, Wheat, Egg", "sauce": "Sushi Rice ; Mayo ; Ikura", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy", "mayContain": "", "page": 11}, {"menu": "Kimchi Sashimi", "allergy": "Seafood(Shellfish, Fish), Wheat, Soy, Seaweed, Sesame Seed", "sauce": "Kimchi Sauce", "sauceAllergy": "Seafood(Shellfish, Fish), Soy, Fruit(Apple, Orange)", "mayContain": "", "page": 11}, {"menu": "Long Bean", "allergy": "Wheat, Seafood(Fish), Sesame seed, Alcohol, Soy", "sauce": "Garlic Sauce", "sauceAllergy": "Wheat, Seafood(Fish), Sesame seed, Alcohol, Soy", "mayContain": "", "page": 12}, {"menu": "Lobster Roll", "allergy": "Wheat, Seafood(Shellfish), Avocado, Soy, Seaweed, Tobiko, Alcohol, Mayo", "sauce": "Sushi Rice ; Mayo ; Tobiko", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 12}, {"menu": "Lobster Sushi", "allergy": "Seafood(Shellfish), Seaweed, Soy, Alcohol, Mayo", "sauce": "Sushi Rice ; Mayo", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "", "page": 12}, {"menu": "Magic Steak", "allergy": "Wheat, Dairy, Egg, Sesame seed, Soy", "sauce": "Steak Sauce", "sauceAllergy": "Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard", "mayContain": "", "page": 13}, {"menu": "Miso Black Cod", "allergy": "Egg, Alcohol, Seafood(Fish), Soy", "sauce": "Mayo", "sauceAllergy": "Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Dairy", "page": 13}, {"menu": "Minced Pork", "allergy": "Wheat, Alcohol, Pork, Sugar, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 13}, {"menu": "Miso Ramen", "allergy": "Wheat, Egg, Alcohol, Pork, Sesame Seed, Seaweed Sugar, Soy, Fruit( Orange)", "sauce": "Deluxe ; Mini", "sauceAllergy": "Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) Egg, Seafood(Fish), Corn ; Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy)", "mayContain": "Chashu : Pork, Sugar, Soy, Wheat Tree nut, Seafood(Shellfish)", "page": 13}, {"menu": "Mango Roll", "allergy": "Wheat, Seafood(Shellfish), Avocado, Mango, Soy, Seaweed, Tobiko, Alcohol", "sauce": "Sushi Rice ; Unagi Sauce ; Tobiko ; Mango Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy ; Wheat, Seafood(Fish), Soy ; Fruit(Mango), Sugar", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 13}, {"menu": "Male Dragon Roll", "allergy": "Wheat, Seafood(Shellfish, Fish), Egg, Seaweed, Soy, Tobiko, Alcohol", "sauce": "Sushi Rice ; Mayo ; Unagi Sauce ; Tobiko ; Ikura", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Alcohol, Sugar, Soy ; Wheat, Seafood(Fish), Soy ; Wheat, Seafood(Fish), Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 13}, {"menu": "Midori Roll", "allergy": "Wheat, Dairy, Alcohol, Soy", "sauce": "Unagi Sauce", "sauceAllergy": "Wheat, Alcohol, Sugar, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 13}, {"menu": "Masago Sushi", "allergy": "Wheat, Seafood(Fish), Seaweed, Soy, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 13}, {"menu": "Macleod Roll", "allergy": "Wheat, Seafood(Fish), Seaweed, Soy, Crunch, Alcohol", "sauce": "Sushi Rice ; Spicy Unagi Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 13}, {"menu": "Ramen Noodle", "allergy": "Wheat, Egg, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 14}, {"menu": "Negi Toro Roll", "allergy": "Seafood(Fish), Seaweed, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "Soy", "page": 14}, {"menu": "Negi Toro Sushi", "allergy": "Seafood(Fish), Seaweed, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 14}, {"menu": "Okonomiyaki", "allergy": "Wheat, Egg, Seafood(Squid, Tuna), Soy", "sauce": "Takoyaki Sauce ; Mayo", "sauceAllergy": "Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 15}, {"menu": "Okonomiyaki (JFC)", "allergy": "Wheat, Seafood(Squid, Tuna, Shellfish), Soy", "sauce": "Takoyaki Sauce ; Mayo", "sauceAllergy": "Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy, Egg, Sesame seed", "page": 15}, {"menu": "Oyster", "allergy": "Seafood(Shellfish), Wheat", "sauce": "Ponzu Sauce", "sauceAllergy": "Wheat, Fruit(Yuzu), Soy", "mayContain": "", "page": 15}, {"menu": "Pork Gyoza", "allergy": "Wheat, Alcohol, Pork, Sesame seed, Soy, Seaweed", "sauce": "Japanese Dressing ; Gyoza Sauce", "sauceAllergy": "Wheat, Soy ; Wheat, Alcohol, Sesame seed, Soy", "mayContain": "", "page": 16}, {"menu": "Potato Cake", "allergy": "Wheat, Soy, Coconut", "sauce": "Takoyaki Sauce", "sauceAllergy": "Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 16}, {"menu": "Pumpkin Potato Cake", "allergy": "Wheat, Soy, Coconut, Sugar, Pumpkin", "sauce": "Takoyaki Sauce", "sauceAllergy": "Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 16}, {"menu": "Philadelphia Roll", "allergy": "Seafood(Fish), Dairy, Seaweed, Sesame Seed, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "Soy", "page": 16}, {"menu": "Peter's Special Roll", "allergy": "Wheat, Seafood(Fish), Egg, Dairy, Soy, Sesame, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 16}, {"menu": "Rack of Lamb", "allergy": "Wheat, Alcohol", "sauce": "Mint Sauce", "sauceAllergy": "Alcohol, Vinegar", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 18}, {"menu": "Red Ramen (Regular)", "allergy": "Wheat, Egg, Alcohol, Pork, Sesame Seed, Sesame oil, Seafood(Shellfish, Fish), Fruit(Apple, Orange), Seaweed, Sugar, Soy", "sauce": "Deluxe ; Mini", "sauceAllergy": "Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) Egg, Seafood(Fish), Corn ; Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy)", "mayContain": "Chashu : Pork, Sugar, Soy, Wheat Tree nut, Seafood(Shellfish)", "page": 18}, {"menu": "Ra-Yu (Chili Oil)", "allergy": "Seasme Oil", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 18}, {"menu": "Rainbow Roll", "allergy": "Wheat, Seafood(Shellfish, Fish), Seaweed, Soy, Avocado, Tobiko, Alcohol", "sauce": "Sushi Rice ; Tobiko", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Seafood(Fish), Soy", "mayContain": "", "page": 18}, {"menu": "Red Tuna Sushi", "allergy": "Seafood(Fish), Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 18}, {"menu": "Regular Sashimi", "allergy": "Seafood(Shellfish, Fish), Wheat, Egg, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 18}, {"menu": "Salmon Kama", "allergy": "", "sauce": "", "sauceAllergy": "", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 19}, {"menu": "Shrimp Tempura", "allergy": "Seafood(Shellfish), Wheat, Alcohol", "sauce": "Tempura Sauce", "sauceAllergy": "Wheat, Seafood(Fish), Alcohol, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 19}, {"menu": "Squid Legs", "allergy": "Seafood(Shellfish), Wheat, Egg, Soy", "sauce": "Volcano Sauce", "sauceAllergy": "Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 19}, {"menu": "Spring Roll", "allergy": "Wheat, Pork, Egg", "sauce": "Sweet Chilli Sauce", "sauceAllergy": "Sugar, Pepper, Corn Starch", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 19}, {"menu": "Spicy Miso Ramen", "allergy": "Wheat, Egg, Alcohol, Pork, Sesame Seed, Seaweed Sugar, Soy, Fruit( Orange), Sesame Oil", "sauce": "Deluxe ; Mini", "sauceAllergy": "Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) Egg, Seafood(Fish), Corn ; Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy)", "mayContain": "Chashu : Pork, Sugar, Soy, Wheat Tree nut, Seafood(Shellfish)", "page": 19}, {"menu": "Spicy Tomato Ramen", "allergy": "Wheat, Egg, Tomato, Seaweed, Sugar, Soy, Corn", "sauce": "Deluxe", "sauceAllergy": "Egg, Seafood(Fish), Alcohol, Seaweed", "mayContain": "", "page": 19}, {"menu": "Steam Rice", "allergy": "", "sauce": "Steak Sauce", "sauceAllergy": "Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard", "mayContain": "", "page": 19}, {"menu": "Seaweed Salad", "allergy": "Wheat, Sesame Seed, Soy, Sesame Oil, Sugar, Alcohol", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 19}, {"menu": "Salmon Roll", "allergy": "Seafood(Fish), Seaweed, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "Soy", "page": 19}, {"menu": "Spicy Salmon Roll", "allergy": "Seafood(Fish), Seaweed, Soy, Sesame Seed, Alcohol, Egg", "sauce": "Sushi Rice ; Chili Volcano Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard, Sesame Seed", "mayContain": "", "page": 19}, {"menu": "Spicy Tuna Roll", "allergy": "Seafood(Fish), Seaweed, Soy, Sesame Seed, Alcohol, Egg", "sauce": "Sushi Rice ; Chili Volcano Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard, Sesame Seed", "mayContain": "", "page": 19}, {"menu": "Signature Roll", "allergy": "Wheat, Seafood(Shellfish,Fish), Seaweed, Soy, Mayo, Tobiko, Avocado, Alcohol", "sauce": "Sushi Rice ; Mayo ; Tobiko", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 19}, {"menu": "Spicy Crunch Roll", "allergy": "Wheat, Seafood(Shellfish, Fish), Seaweed, Sesame Seed, Soy, Tobiko, Alcohol, Egg, Dairy", "sauce": "Sushi Rice ; Volcano Sauce ; Crunch", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Sesame Seed, Dairy, Seaweed, Fruit(Orange Peel)", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 19}, {"menu": "Salmon Sushi", "allergy": "Seafood(Fish), Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 19}, {"menu": "Seared Salmon Sushi", "allergy": "Seafood(Fish), Alcohol, Mayo", "sauce": "Sushi Rice ; Volcano Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "", "page": 19}, {"menu": "Seared Tuna Sushi", "allergy": "Seafood(Fish), Alcohol, Mayo", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 19}, {"menu": "Smoked Salmon Sushi", "allergy": "Seafood(Fish), Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 20}, {"menu": "Scallop Sushi", "allergy": "Seafood(Shellfish, Fish), Alcohol, Egg, Wheat", "sauce": "Sushi Rice ; Mayo ; Unagi Sauce ; Masago", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Alcohol, Sugar, Soy ; Wheat, Seafood(Fish), Soy", "mayContain": "", "page": 20}, {"menu": "Special Scallop Sushi", "allergy": "Seafood(Shellfish, Fish), Seaweed, Soy, Alcohol, Egg, Wheat", "sauce": "Sushi Rice ; Mayo ; Tobiko", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy", "mayContain": "", "page": 20}, {"menu": "Saba Sushi", "allergy": "Seafood(Fish), Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 20}, {"menu": "Sushi rice", "allergy": "Contain Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 20}, {"menu": "Teriyaki Beef", "allergy": "Wheat, Dairy, Egg, Alcohol, Sesame seed, Soy", "sauce": "Teriyaki sauce ; Steak Sauce", "sauceAllergy": "Wheat, Alcohol, Soy ; Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard", "mayContain": "", "page": 21}, {"menu": "Teriyaki Chicken", "allergy": "Wheat, Dairy, Egg, Alcohol, Sesame seed, Soy", "sauce": "Teriyaki sauce ; Steak Sauce", "sauceAllergy": "Wheat, Alcohol, Soy ; Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard", "mayContain": "", "page": 21}, {"menu": "Takoyaki", "allergy": "Wheat, Soy, Seafood(Shellfish), Egg", "sauce": "Japanese Dressing ; Takoyaki Sauce ; Mayo", "sauceAllergy": "Wheat, Soy ; Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 21}, {"menu": "Tako Wasabi", "allergy": "Wheat, Seafood(Shellfish), Alcohol, Soy, Seaweed", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 21}, {"menu": "TanTan Mazemen (Mild)", "allergy": "Wheat, Egg, Seafood(Fish), Alcohol, Pork, Tomato, Seaweed, Sugar, Soy, Corn, Sesame", "sauce": "Topping", "sauceAllergy": "Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) ; Crunch, Kale, Green onion, Seaweed, Egg, Minced Pork, Corn", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 21}, {"menu": "TanTan Mazemen (Spicy)", "allergy": "Wheat, Egg, Seafood(Fish), Alcohol, Pork, Tomato, Seaweed, Sugar, Soy, Corn, Sesame", "sauce": "Topping", "sauceAllergy": "Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) ; Crunch, Kale, Green onion, Seaweed, Egg, Minced Pork, Corn", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 21}, {"menu": "Tiger Roll", "allergy": "Seafood(Fish), Avocado, Seaweed, Soy, Masago, Crunch, Alcohol, Dairy, Wheat", "sauce": "Sushi Rice ; Unagi Sauce ; Crunch", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy ; Wheat, Sesame Seed, Dairy, Seaweed, Fruit(Orange Peel)", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 21}, {"menu": "Togarashi Roll", "allergy": "Wheat, Seafood(Fish), Avocado, Seaweed, Soy, Sesame Seed, Tobiko, Alcohol, Egg", "sauce": "Sushi Rice ; Chili Volcano Sauce ; Unagi Sauce ; Sriracha Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard, Sesame Seed ; Wheat, Alcohol, Sugar, Soy ; Pepper", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 21}, {"menu": "Tai (Red Snapper) Sushi", "allergy": "Seafood(Fish), Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 21}, {"menu": "Tamago Sushi", "allergy": "Wheat, Egg, Soy, Seafood(Fish), Seaweed, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 21}, {"menu": "Tako (Octopus) Sushi", "allergy": "Seafood(Shellfish), Seaweed, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 21}, {"menu": "Tobiko Sushi", "allergy": "Wheat, Seafood(Fish), Seaweed, Soy, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 21}, {"menu": "Toro Sushi", "allergy": "Seafood(Fish), Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 21}, {"menu": "Tuna Sushi", "allergy": "Seafood(Fish), Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "", "page": 21}, {"menu": "Tuna Roll", "allergy": "Seafood(Fish), Seaweed, Alcohol", "sauce": "Sushi Rice", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu)", "mayContain": "Soy", "page": 21}, {"menu": "Udon Noodle", "allergy": "Wheat", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 22}, {"menu": "Unagi Roll", "allergy": "Wheat, Seafood(Fish), Seaweed, Soy, Sesame Seed, Alcohol", "sauce": "Sushi Rice ; Unagi Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy", "mayContain": "", "page": 22}, {"menu": "Unagi Sushi", "allergy": "Wheat, Seafood(Fish), Seaweed, Sesame Seed, Soy, Alcohol", "sauce": "Sushi Rice ; Unagi Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy", "mayContain": "", "page": 22}, {"menu": "Waffle Sweet Potato", "allergy": "Soy, Egg", "sauce": "Volcano Sauce", "sauceAllergy": "Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 23}, {"menu": "Veggie Gyoza", "allergy": "Wheat, Alcohol, Sesame seed, Soy, Seaweed", "sauce": "Japanese Dressing ; Gyoza Sauce", "sauceAllergy": "Wheat, Soy ; Wheat, Alcohol, Sesame seed, Soy", "mayContain": "", "page": 24}, {"menu": "Veggie Tomato Ramen", "allergy": "Wheat, Egg, Tomato, Seaweed, Sugar, Soy, Corn", "sauce": "Deluxe", "sauceAllergy": "Egg, Seafood(Fish), Alcohol, Seaweed", "mayContain": "", "page": 24}, {"menu": "Volcano Roll", "allergy": "Wheat, Seafood(Shellfish, Fish), Seaweed, Soy, Sesame Seed, Alcohol, Egg", "sauce": "Sushi Rice ; Volcano Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 24}, {"menu": "Vegetable Roll", "allergy": "Wheat, Avocado, Seaweed, Soy, Alcohol, Egg", "sauce": "Sushi Rice ; Mayo ; Unagi Sauce", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Alcohol, Sugar, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 24}, {"menu": "Yam Tempura", "allergy": "Wheat, Seafood(Fish), Alcohol", "sauce": "Tempura Sauce", "sauceAllergy": "Wheat, Seafood(Fish), Alcohol, Soy", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 26}, {"menu": "Yum Fries", "allergy": "Wheat, Soy, Sugar, Egg", "sauce": "Volcano Sauce", "sauceAllergy": "Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy, Soy", "page": 26}, {"menu": "Yam Roll", "allergy": "Wheat, Avocado, Seaweed, Soy, Sesame Seed, Alcohol, Egg", "sauce": "Sushi Rice ; Mayo", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "mayContain": "Seafood(Shellfish, Fish), Dairy", "page": 26}, {"menu": "Yuzu Ahi Sushi", "allergy": "Wheat, Soy, Seafood(Fish), Alcohol", "sauce": "Sushi Rice ; Yuzu Dressing", "sauceAllergy": "Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Fruit(Yuzu), Soy", "mayContain": "", "page": 26}, {"menu": "Bacon Cream (Pasta Sauce)", "allergy": "Wheat, Seafood(Shellfish), Dairy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Bolognese (Pasta Sauce)", "allergy": "Wheat, Alcohol, Pork, Soy, Tomato, Dairy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Chili pepper powder", "allergy": "Fruit(Orange Peel), Sesame Seed, Seaweed", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Chili Volcano", "allergy": "Egg, Alcohol, Sesame Seed, Seaweed, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Dashinomoto", "allergy": "Seafood(Fish), Dairy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Donburi sauce", "allergy": "Wheat, Seafood(Fish), Alcohol, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Fish Sauce", "allergy": "Seafood(Fish), Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Garlic Sauce", "allergy": "Wheat, Seafood(Shellfish), Sesame Seed, Sesame Oil, Alcohol, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Ginger sauce", "allergy": "Fruit(Mango), Pepper", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Gochujang mixed", "allergy": "Wheat, Alcohol, Sesame Oil, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Gyoza sauce", "allergy": "Wheat, Alcohol, Sesame Seed, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Hoisin sauce", "allergy": "Wheat, Alcohol, Sesame Seed, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Japanese dressing", "allergy": "Wheat, Fruit(Grapefruit), Soy, Mustard, Wasabi", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Kimchi sauce", "allergy": "Wheat, Seafood(Shellfish, Fish), Fruit(Apple,Orange), Seaweed, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Mint sauce", "allergy": "Alcohol, Fruit(Watermelon)", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Miso paste", "allergy": "Alcohol, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Miso Black cod sauce", "allergy": "Alcohol, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Mirin", "allergy": "Alcohol", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Mayo", "allergy": "Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Mango sauce", "allergy": "Fruit(Mango), Alcohol, Sesame Seed", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Miso base (Miso ramen base)", "allergy": "Soy, Fruit(Orange)", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Oyster sauce", "allergy": "Wheat, Seafood(Shellfish)", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Ponzu (Yuzu) sauce", "allergy": "Wheat, Fruit(Yuzu), Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Poke Sauce", "allergy": "Wheat, Sesame Oil, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Rice vinegar mixed", "allergy": "Alcohol, Seaweed(Konbu)", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Sushi Vinegar (Marukan vinegar)", "allergy": "", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Soy sauce", "allergy": "Wheat, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 28}, {"menu": "Tabasco Sriracha", "allergy": "", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Sweet chili sauce", "allergy": "Pepper", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Salad dressing", "allergy": "Egg, Sesame Seed, Seaweed, Soy, Fruit(Orange)", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Sesame dressing", "allergy": "Soy, Sesame Seed, Wheat, Egg, Mustart", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Steak Sauce", "allergy": "Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Seafood Sauce", "allergy": "Egg, Alcohol, Fruit(Lemon), Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Spicy BBQ Fried Chicken", "allergy": "", "sauce": "", "sauceAllergy": "", "mayContain": "Wheat, Seafood(Fish), Soy, Dairy, Egg, Seafood(Shelfish), Peanut", "page": 29}, {"menu": "Teriyaki sauce", "allergy": "Wheat, Alcohol, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Tempura Sauce", "allergy": "Wheat, Seafood(Fish), Alcohol, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Takoyaki Sauce (Katsu Sauce - JFC)", "allergy": "Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Tonkatsu (Black ramen base)", "allergy": "Alcohol, Fruit(Apple), Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Tomato ramen base", "allergy": "Wheat, Tomato, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Tabasco sauce", "allergy": "Pepper", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Unagi sauce mixed", "allergy": "Wheat, Alcohol, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Ultra Spicy Sauce", "allergy": "Wheat, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Volcano Sauce", "allergy": "Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Vegetable oil spray", "allergy": "Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Yuzu Dressing", "allergy": "Wheat, Fruit(Yuzu), Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "New Unagi sauce K4 Only", "allergy": "Wheat, Alcohol, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Spicy Unagi sauce K4 Only", "allergy": "Wheat, Alcohol, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Gomae Sauce K1 Only", "allergy": "Sesame Seed, Seafood(Fish), Wheat", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Smoky BBQ Sauce", "allergy": "", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Yellow Mustard", "allergy": "", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Honey Mustard Sauce (Chicken)", "allergy": "Mustard, Tomato, Egg, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 29}, {"menu": "Corn Syrup", "allergy": "", "sauce": "", "sauceAllergy": "", "mayContain": "Sesame Seed, Wheat, Soy, Seafood(Fish), Dairy", "page": 29}, {"menu": "Soy Garlic Sauce (Chicken)", "allergy": "", "sauce": "", "sauceAllergy": "", "mayContain": "Soy Sesame, Seafood(Fish), Dairy", "page": 30}, {"menu": "Gochujang", "allergy": "Wheat, Soy, Alcohol", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 30}, {"menu": "Mango Flower Ice Cream", "allergy": "Dairy", "sauce": "", "sauceAllergy": "", "mayContain": "Wheat, Egg, Sesame Seed, Tree nuts, Peanut, Soy, Sulphite", "page": 31}, {"menu": "Coconut Surprise Ice Cream", "allergy": "Dairy", "sauce": "", "sauceAllergy": "", "mayContain": "Wheat, Egg, Sesame Seed, Tree nuts, Peanut, Soy, Sulphite", "page": 31}, {"menu": "Green Tea Ice Cream", "allergy": "Dairy", "sauce": "", "sauceAllergy": "", "mayContain": "Wheat, Egg, Sesame Seed, Tree nuts, Peanut, Soy, Sulphite", "page": 31}, {"menu": "Pear Ice Ice Cream", "allergy": "Dairy, Egg, Almonds, Soy", "sauce": "", "sauceAllergy": "", "mayContain": "Wheat, Peanuts, Tree nuts, Sesame Seed, Sulphite", "page": 31}, {"menu": "Vanilla Ice Cream", "allergy": "Dairy, Egg", "sauce": "", "sauceAllergy": "", "mayContain": "Wheat, Sesame, Tree nuts, Peanuts, Soy, Sulphite", "page": 31}, {"menu": "Donut Fries", "allergy": "Dairy, Egg, Soy, Wheat", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 31}, {"menu": "Peters #1", "allergy": "Dairy, Egg, Soy, Wheat", "sauce": "", "sauceAllergy": "", "mayContain": "", "page": 31}];
-let currentFilter = "";
-function getTagClass(word) {
-  const w = String(word).toLowerCase();
-  if (w.includes("wheat") || w.includes("gluten")) return "tag-wheat";
-  if (w.includes("egg")) return "tag-egg";
-  if (w.includes("dairy") || w.includes("milk") || w.includes("cream")) return "tag-dairy";
-  if (w.includes("soy")) return "tag-soy";
-  if (w.includes("shellfish")) return "tag-shellfish";
-  if (w.includes("seafood")) return "tag-seafood";
-  if (w.includes("fish") || w.includes("tuna") || w.includes("salmon") || w.includes("cod") || w.includes("saba") || w.includes("hamachi") || w.includes("snapper")) return "tag-fish";
-  if (w.includes("sesame")) return "tag-sesame";
-  if (w.includes("peanut")) return "tag-peanut";
-  if (w.includes("tree nut") || w.includes("tree nuts") || w.includes("almond") || w.includes("nuts")) return "tag-tree-nut";
-  if (w.includes("alcohol") || w.includes("mirin")) return "tag-alcohol";
-  if (w.includes("lemon")) return "tag-lemon";
-  if (w.includes("fruit") || w.includes("apple") || w.includes("orange") || w.includes("mango") || w.includes("yuzu") || w.includes("peach") || w.includes("grapefruit") || w.includes("watermelon") || w.includes("raspberry")) return "tag-fruit";
-  if (w.includes("mustard")) return "tag-mustard";
-  if (w.includes("sulphite") || w.includes("sulfite")) return "tag-sulphite";
-  return "tag-default";
-}
-function splitItems(text) {
-  if (!text) return [];
-  return String(text).split(/,|;/).map(x => cleanTagText(x)).filter(Boolean);
-}
-function cleanTagText(text) {
-  return String(text || "")
-    .trim()
-    // When text like "Seafood(Shellfish, Fish)" is split by comma, it can create "Fish)".
-    // This removes only unmatched closing brackets while keeping normal text like "Seafood(Fish)".
-    .replace(/^[)]*/, "")
-    .replace(/\)+$/g, function(match, offset, fullText) {
-      return fullText.includes("(") ? match : "";
-    })
-    .trim();
-}
-function makeTags(text, type = "normal") {
-  const items = splitItems(text);
-  if (!items.length) return "N/A";
-  const extraClass = type === "sauceAllergy" ? " sauce-tag" : "";
-  return items.map(item => `<span class="allergy-tag${extraClass} ${getTagClass(item)}">${escapeHtml(item)}</span>`).join("");
-}
-function escapeHtml(str) {
-  return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-}
-function normalizeText(str) {
-  return String(str || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-function itemText(item) {
-  return [item.menu,item.allergy,item.sauce,item.sauceAllergy,item.mayContain].join(' ').toLowerCase();
-}
-function getSearchScore(item, searchText, searchWords) {
-  if (!searchText) return 0;
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Kinjo Allergy Search 2026</title>
+		<style>
+			:root {
+				--bg: #f6f7fb;
+				--card: #fff;
+				--text: #1f2937;
+				--muted: #6b7280;
+				--dark: #111827;
+				--danger: #dc2626;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				font-family: Arial, Helvetica, sans-serif;
+				background: var(--bg);
+				color: var(--text);
+			}
+			header {
+				background: linear-gradient(135deg, #111827, #374151);
+				color: white;
+				padding: 22px 16px;
+				text-align: center;
+			}
+			header h1 {
+				margin: 0 0 6px;
+				font-size: 26px;
+			}
+			header p {
+				margin: 0;
+				opacity: 0.9;
+			}
+			.container {
+				max-width: 1200px;
+				margin: auto;
+				padding: 18px;
+			}
+			.search-wrap {
+				background: white;
+				padding: 14px;
+				border-radius: 16px;
+				box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07);
+				margin-bottom: 14px;
+			}
+			.search-box {
+				width: 100%;
+				padding: 15px 16px;
+				font-size: 18px;
+				border: 2px solid #e5e7eb;
+				border-radius: 12px;
+				outline: none;
+			}
+			.search-box:focus {
+				border-color: #111827;
+			}
+			.help {
+				color: var(--muted);
+				font-size: 13px;
+				margin-top: 8px;
+			}
+			.filters {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px;
+				margin: 14px 0;
+			}
+			.filter-btn {
+				padding: 9px 13px;
+				border: 1px solid #d1d5db;
+				background: white;
+				border-radius: 999px;
+				cursor: pointer;
+				font-size: 14px;
+			}
+			.filter-btn.active {
+				background: #111827;
+				color: white;
+				border-color: #111827;
+			}
+			.clear-btn {
+				padding: 9px 16px;
+				border: none;
+				background: #dc2626;
+				color: white;
+				border-radius: 999px;
+				cursor: pointer;
+				font-size: 14px;
+				font-weight: 700;
+				box-shadow: 0 3px 8px rgba(220, 38, 38, 0.25);
+			}
+			.clear-btn:hover {
+				background: #b91c1c;
+			}
+			.result-count {
+				margin: 12px 0;
+				font-weight: 700;
+				color: #374151;
+			}
+			.card {
+				background: var(--card);
+				border-radius: 16px;
+				padding: 16px;
+				margin-bottom: 12px;
+				box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+				border-left: 6px solid #111827;
+			}
+			.menu-name {
+				font-size: 21px;
+				font-weight: 800;
+				margin-bottom: 10px;
+			}
+			.row {
+				margin: 10px 0;
+			}
+			.sauce-allergy-row {
+				background: #eef6ff;
+				border: 1px solid #bfdbfe;
+				border-radius: 12px;
+				padding: 10px;
+			}
+			.sauce-tag {
+				border: 2px solid rgba(37, 99, 235, 0.35);
+				box-shadow: 0 1px 3px rgba(37, 99, 235, 0.12);
+			}
+			.exact-match-badge {
+				display: inline-block;
+				margin-left: 8px;
+				padding: 3px 8px;
+				border-radius: 999px;
+				background: #dcfce7;
+				color: #166534;
+				font-size: 12px;
+				font-weight: 800;
+				vertical-align: middle;
+			}
+			.label {
+				display: block;
+				font-weight: 800;
+				color: #4b5563;
+				margin-bottom: 5px;
+			}
+			.warning {
+				background: #fff7ed;
+				border: 1px solid #fed7aa;
+				padding: 10px;
+				border-radius: 12px;
+				margin-top: 10px;
+			}
+			.allergy-tag {
+				display: inline-block;
+				padding: 5px 9px;
+				margin: 3px 4px 3px 0;
+				border-radius: 999px;
+				font-size: 13px;
+				font-weight: 700;
+			}
+			.tag-wheat,
+			.tag-gluten {
+				background: #fed7aa;
+				color: #7c2d12;
+			}
+			.tag-egg {
+				background: #fef08a;
+				color: #713f12;
+			}
+			.tag-dairy {
+				background: #bfdbfe;
+				color: #1e3a8a;
+			}
+			.tag-soy {
+				background: #bbf7d0;
+				color: #14532d;
+			}
+			.tag-seafood {
+				background: #bae6fd;
+				color: #075985;
+			}
+			.tag-shellfish {
+				background: #99f6e4;
+				color: #134e4a;
+			}
+			.tag-fish {
+				background: #cffafe;
+				color: #155e75;
+			}
+			.tag-sesame {
+				background: #e7e5e4;
+				color: #44403c;
+			}
+			.tag-peanut {
+				background: #fecaca;
+				color: #7f1d1d;
+			}
+			.tag-tree-nut {
+				background: #ddd6fe;
+				color: #4c1d95;
+			}
+			.tag-alcohol {
+				background: #fbcfe8;
+				color: #831843;
+			}
+			.tag-lemon,
+			.tag-fruit {
+				background: #fecdd3;
+				color: #881337;
+			}
+			.tag-mustard {
+				background: #fde68a;
+				color: #78350f;
+			}
+			.tag-sulphite {
+				background: #e9d5ff;
+				color: #581c87;
+			}
+			.tag-default {
+				background: #f3f4f6;
+				color: #374151;
+			}
+			.source-page {
+				color: #9ca3af;
+				font-size: 12px;
+				margin-top: 10px;
+			}
+			.no-result {
+				text-align: center;
+				padding: 36px;
+				color: #777;
+				font-size: 18px;
+				background: white;
+				border-radius: 16px;
+			}
+			.footer {
+				text-align: center;
+				padding: 30px 20px;
+				color: #777;
+				font-size: 14px;
+				margin-top: 40px;
+				border-top: 1px solid #ddd;
+				background: #fafafa;
+			}
 
-  const query = normalizeText(searchText);
-  const menu = normalizeText(item.menu);
-  const sauce = normalizeText(item.sauce);
-  const allergy = normalizeText(item.allergy);
-  const sauceAllergy = normalizeText(item.sauceAllergy);
-  const mayContain = normalizeText(item.mayContain);
+			.footer strong {
+				color: #111827;
+			}
+			@media (max-width: 640px) {
+				header h1 {
+					font-size: 22px;
+				}
+				.container {
+					padding: 12px;
+				}
+				.search-box {
+					font-size: 16px;
+				}
+				.menu-name {
+					font-size: 19px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1>Kinjo Allergy Information 2026</h1>
+			<p>Search by menu item, keyword, sauce, or allergy</p>
+		</header>
+		<div class="container">
+			<div class="search-wrap">
+				<input
+					type="text"
+					id="searchInput"
+					class="search-box"
+					placeholder="Search: pasta, salmon, egg, dairy, seafood, alcohol, wheat..."
+				/>
+				<div class="help">
+					Keyword search works with partial words. Example: type <b>pasta</b>, <b>salmon</b>, <b>volcano</b>,
+					<b>tree nut</b>, or <b>shellfish</b>.
+				</div>
+			</div>
+			<div class="filters">
+				<button class="filter-btn" onclick="filterByAllergy('Wheat')">Wheat / Gluten</button>
+				<button class="filter-btn" onclick="filterByAllergy('Egg')">Egg</button>
+				<button class="filter-btn" onclick="filterByAllergy('Dairy')">Dairy</button>
+				<button class="filter-btn" onclick="filterByAllergy('Soy')">Soy</button>
+				<button class="filter-btn" onclick="filterByAllergy('Seafood')">Seafood</button>
+				<button class="filter-btn" onclick="filterByAllergy('Shellfish')">Shellfish</button>
+				<button class="filter-btn" onclick="filterByAllergy('Fish')">Fish</button>
+				<button class="filter-btn" onclick="filterByAllergy('Sesame')">Sesame</button>
+				<button class="filter-btn" onclick="filterByAllergy('Peanut')">Peanut</button>
+				<button class="filter-btn" onclick="filterByAllergy('Tree nut')">Tree Nut</button>
+				<button class="filter-btn" onclick="filterByAllergy('Alcohol')">Alcohol</button>
+				<button class="filter-btn" onclick="filterByAllergy('Lemon')">Lemon</button>
+				<button class="filter-btn" onclick="filterByAllergy('Fruit')">Fruit</button>
+				<button class="filter-btn" onclick="filterByAllergy('Mustard')">Mustard</button>
+				<button class="filter-btn" onclick="filterByAllergy('Sulphite')">Sulphite</button>
+				<button class="clear-btn" onclick="clearFilters()">Clear Search</button>
+			</div>
+			<div id="resultCount" class="result-count"></div>
+			<div id="results"></div>
+		</div>
 
-  if (menu === query) return 1000;              // exact full menu name, e.g. Ikura Sushi
-  if (menu.startsWith(query)) return 800;       // menu starts with query
-  if (menu.includes(query)) return 650;         // query appears inside menu name
-  if (sauce.includes(query)) return 450;
-  if (allergy.includes(query)) return 300;
-  if (sauceAllergy.includes(query)) return 250;
-  if (mayContain.includes(query)) return 200;
+		<footer class="footer">
+			<p><strong>Kinjo Internal Allergy System</strong></p>
+			<p>Developed by Richie Yen</p>
+			<p>For Internal Staff Use Only</p>
+			<p>Version 1.0 • Updated May 2026</p>
+		</footer>
 
-  return searchWords.length ? 100 : 0;
-}
-function renderResults() {
-  const rawSearchText = document.getElementById("searchInput").value.trim();
-  const searchText = rawSearchText.toLowerCase();
-  const searchWords = searchText.split(/\s+/).filter(Boolean);
-  const filtered = allergyData
-    .filter(item => {
-      const keywords = itemText(item);
-      const matchesSearch = searchWords.every(word => keywords.includes(word));
-      const matchesFilter = currentFilter === "" || keywords.includes(currentFilter.toLowerCase());
-      return matchesSearch && matchesFilter;
-    })
-    .map((item, index) => ({ item, index, score: getSearchScore(item, rawSearchText, searchWords) }))
-    .sort((a, b) => b.score - a.score || a.index - b.index)
-    .map(result => result.item);
+		<script>
+			const allergyData = [
+				{
+					menu: 'Asparagus Tempura',
+					allergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					sauce: 'Tempura Sauce',
+					sauceAllergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 1,
+				},
+				{
+					menu: 'Avocado Tempura',
+					allergy: 'Wheat, Alcohol, Sugar, Soy, Sesame Seed',
+					sauce: 'Unagi Sauce',
+					sauceAllergy: 'Wheat, Alcohol, Sugar, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 1,
+				},
+				{
+					menu: 'Agedashi Tofu',
+					allergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					sauce: 'Tempura Sauce',
+					sauceAllergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 1,
+				},
+				{
+					menu: 'Avocado Roll',
+					allergy: 'Avocado, Sesame Seed, Seaweed, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: 'Soy',
+					page: 1,
+				},
+				{
+					menu: 'Broccolini',
+					allergy: 'Wheat, Seafood(Shellfish), Sesame seed, Alcohol, Soy',
+					sauce: 'Garlic Sauce',
+					sauceAllergy: 'Wheat, Seafood(Shellfish), Sesame seed, Alcohol, Soy',
+					mayContain: '',
+					page: 2,
+				},
+				{
+					menu: 'Broccoli Tempura',
+					allergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					sauce: 'Tempura Sauce',
+					sauceAllergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 2,
+				},
+				{
+					menu: 'Black Ramen (Regular)',
+					allergy: 'Wheat, Egg, Alcohol, Pork, Sesame Seed, Seaweed, Fruit(Apple), Sugar, Soy',
+					sauce: 'Deluxe ; Mini',
+					sauceAllergy:
+						'Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) Egg, Seafood(Fish), Corn ; Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy)',
+					mayContain: 'Chashu : Pork, Sugar, Soy, Wheat Tree nut, Seafood(Shellfish)',
+					page: 2,
+				},
+				{
+					menu: 'Benihana Roll',
+					allergy: 'Wheat, Seafood(Fish), Soy, Seaweed, Tobiko, Alcohol, Egg',
+					sauce: 'Sushi Rice ; Volcano Sauce ; Unagi Sauce ; Tobiko ; Sriracha',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Alcohol, Sugar, Soy ; Wheat, Seafood(Fish), Soy ; Pepper',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 2,
+				},
+				{
+					menu: 'Beef Tataki',
+					allergy: '',
+					sauce: 'Ponzu Sauce',
+					sauceAllergy: 'Wheat, Fruit(Yuzu), Soy',
+					mayContain: 'Wheat, Dairy, Seafood(Shellfish, Fish)',
+					page: 2,
+				},
+				{
+					menu: 'Bolognese Pasta',
+					allergy: 'Wheat, Alcohol, Dairy, Pork, Soy, Tomato',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 2,
+				},
+				{
+					menu: 'Bacon Cream Pasta',
+					allergy: 'Wheat, Seafood(Shellfish), Dairy, Pork',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 2,
+				},
+				{
+					menu: 'Chicken Fried Rice',
+					allergy: 'Wheat, Dairy, Egg, Sesame oil, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 3,
+				},
+				{
+					menu: 'Chicken Yakitori',
+					allergy: 'Wheat, Alcohol, Soy',
+					sauce: 'Teriyaki sauce',
+					sauceAllergy: 'Wheat, Alcohol, Soy',
+					mayContain: '',
+					page: 3,
+				},
+				{
+					menu: 'Calamari Tempura',
+					allergy: 'Wheat, Seafood(Shellfish, Fish), Egg',
+					sauce: 'Volcano Sauce',
+					sauceAllergy: 'Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 3,
+				},
+				{
+					menu: 'Chicken Karaage',
+					allergy: 'Wheat, Soy, Egg',
+					sauce: 'Volcano Sauce',
+					sauceAllergy: 'Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 3,
+				},
+				{
+					menu: 'Chicken Katsu',
+					allergy: 'Wheat, Palm Oil, Cane Sugar, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 3,
+				},
+				{
+					menu: 'Chashu',
+					allergy: 'Wheat, Pork, Sugar, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Peanut, Seafood(Shellfish)',
+					page: 3,
+				},
+				{
+					menu: 'Chashu Donburi',
+					allergy: 'Wheat, Pork, Seafood(Fish), Alcohol, Sugar, Soy',
+					sauce: 'Donburi Sauce',
+					sauceAllergy: 'Wheat, Seafood(Fish), Alcohol, Sugar, Soy',
+					mayContain: 'peanut, Seafood(Shellfish)',
+					page: 3,
+				},
+				{
+					menu: 'Cucumer Roll',
+					allergy: 'Cucumber, Sesame Seed, Seaweed, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: 'Soy',
+					page: 3,
+				},
+				{
+					menu: 'Cream Corn Croquette',
+					allergy: 'Wheat, Dairy, Soy, Pork',
+					sauce: 'Takoyaki Sauce',
+					sauceAllergy: 'Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 3,
+				},
+				{
+					menu: 'California Roll',
+					allergy: 'Avocado, Crabmeat Mix(Wheat, Seafood(Shellfish, Fish), Mayo, Seaweed, Soy, Sesame Seed, Alcohol',
+					sauce: 'Sushi Rice ; Crab Meat ; Mayo',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Seafood(Shellfish, Fish) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: '',
+					page: 3,
+				},
+				{
+					menu: 'Cowboy Oshizushi',
+					allergy: 'Wheat, Alcohol, Soy',
+					sauce: 'Sushi Rice ; Teriyaki sauce',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 3,
+				},
+				{
+					menu: 'Crunchy Ahi Oshizushi',
+					allergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					sauce: 'Sushi Rice ; Spicy Unagi Sauce',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 3,
+				},
+				{
+					menu: 'Donut Fries (Funnel Fries)',
+					allergy: 'Wheat, Soy, Egg, Dairy',
+					sauce: 'Raspnerry Syrup ; Cinnamon Powder ; Sugar Powder',
+					sauceAllergy: 'Sugar, Raspberry, Apple Powder ; Cinnamon, Sunflowder Oil ; Sugar',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 4,
+				},
+				{
+					menu: 'Dynamite Roll',
+					allergy: 'Wheat, Seafood(Shellfish), Avocado, Sesame Seed, Seaweed, Soy Masago, Alcohol, Egg',
+					sauce: 'Sushi Rice ; Mayo ; Masago',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 4,
+				},
+				{
+					menu: 'Deluxe Sashimi',
+					allergy: 'Seafood(Shellfish, Fish), Wheat, Egg, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 4,
+				},
+				{ menu: 'Edamame', allergy: 'Soybean', sauce: 'Salt', sauceAllergy: '', mayContain: 'Wheat', page: 5 },
+				{
+					menu: 'Ebi Sushi',
+					allergy: 'Seafood(Shellfish), Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 5,
+				},
+				{ menu: 'Fukujin Zuke', allergy: '', sauce: '', sauceAllergy: '', mayContain: '', page: 6 },
+				{
+					menu: 'Female Dragon Roll',
+					allergy: 'Wheat, Seafood(Shellfish, Fish), Avocado, Soy, Seaweed, Tobiko, Egg, Alcohol',
+					sauce: 'Sushi Rice ; Mayo ; Volcano Sauce ; Ikura',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 6,
+				},
+				{
+					menu: 'Grilled Salmon',
+					allergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					sauce: 'Teriyaki Sauce',
+					sauceAllergy: 'Wheat, Alcohol, Soy',
+					mayContain: 'Dairy',
+					page: 7,
+				},
+				{
+					menu: 'Grilled Shrimp',
+					allergy: 'Wheat, Seafood(Shellish), Egg, Alcohol, Soy',
+					sauce: 'Seafood Sauce',
+					sauceAllergy: 'Egg, Alcohol, Soy',
+					mayContain: 'Dairy',
+					page: 7,
+				},
+				{
+					menu: 'Grilled Scallop',
+					allergy: 'Wheat, Seafood(Shellish), Egg, Alcohol, Soy',
+					sauce: 'Seafood Sauce',
+					sauceAllergy: 'Egg, Alcohol, Soy',
+					mayContain: 'Dairy',
+					page: 7,
+				},
+				{
+					menu: 'Gomae',
+					allergy: 'Wheat, Sesame seed, Seafood(Fish)',
+					sauce: 'Goma Sauce',
+					sauceAllergy: 'Sesame seed, Fish sauce',
+					mayContain: '',
+					page: 7,
+				},
+				{
+					menu: 'Ginger Beef',
+					allergy: 'Wheat, Egg, Pepper, Sesame Seed',
+					sauce: 'Ginger Sauce',
+					sauceAllergy: 'Fruit(Mango), Sugar, Chilli, Corn Starch',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 7,
+				},
+				{
+					menu: 'Ginger Shrimp',
+					allergy: 'Wheat, Seafood(Fish)',
+					sauce: 'Ginger Sauce',
+					sauceAllergy: 'Fruit(Mango), Sugar, Chilli, Corn Starch',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 7,
+				},
+				{
+					menu: 'Gochujang Mix',
+					allergy: 'Wheat, Sesame oil, Alcohol, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 7,
+				},
+				{
+					menu: 'Golden Dragon Roll',
+					allergy: 'Wheat, Seafood(Shellfish, Fish), Seaweed, Soy, Dairy, Alcohol, Crunch',
+					sauce: 'Sushi Rice ; Unagi Sauce ; Crunch ; Sriracha',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy ; Wheat, Sesame Seed, Dairy, Seaweed, Fruit(Orange Peel) ; Pepper',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 7,
+				},
+				{
+					menu: 'Gyu (Steak) Sushi',
+					allergy: '',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: 'Wheat, Dairy, Seafood(Shellfish, Fish), Alcohol',
+					page: 7,
+				},
+				{
+					menu: 'Green Salad',
+					allergy: 'Avocado, Egg',
+					sauce: 'Salad Dressing ; Seaweed Salad ; Lobster Mix',
+					sauceAllergy:
+						'Egg, Sesame Seed, Seaweed, Soy, Fruit(Orange) ; Sesame Seed, Soy, Sesame Oil, Sugar, Alcohol ; Seafood(Shellfish), Seaweed, Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: '',
+					page: 7,
+				},
+				{
+					menu: 'Golden Crispy',
+					allergy: 'Wheat, Sesame Seed, Seafood(Fish), Mustard',
+					sauce: 'Spicy BBQ Sauce ; Honey Mustard Sauce ; Sweet Chili Sauce ; Soy Garlic Sauce',
+					sauceAllergy:
+						'Wheat, Seafood(Fish), Soy, Dairy, May contain Egg, Seafood(Shelfish), Peanut ; Mustard, Tomato, Egg, Soy ; Wheat, Soy, Alcohol, May contain Sesame Seed, Seafood(Fish), Dairy ; Soy, May contain Sesame Seed, Wheat, Seafood(Fish), Dairy',
+					mayContain: '',
+					page: 7,
+				},
+				{
+					menu: 'Hash Brown',
+					allergy: 'Potato, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 8,
+				},
+				{
+					menu: 'Hot California Roll',
+					allergy:
+						'Wheat, Avocado, Crabmeat Mix(Wheat, Seafood(Shellfish, Fish), Mayo, Alcohol, Seaweed, Sesame Seed, Soy',
+					sauce: 'Sushi Rice ; Crab Meat ; Mayo',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Seafood(Shellfish, Fish) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 8,
+				},
+				{
+					menu: 'Hot Beef Roll',
+					allergy: 'Wheat, Dairy, Egg, Alcohol, Seaweed, Sesame seed, Soy',
+					sauce: 'Sushi Rice ; Unagi Sauce ; Steak Sauce',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy ; Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 8,
+				},
+				{
+					menu: 'Hanabi Oshizushi',
+					allergy: 'Seafood(Fish), Avocado, Alcohol, Egg, Soy',
+					sauce: 'Sushi Rice ; Mayo',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: '',
+					page: 8,
+				},
+				{
+					menu: 'Hamachi Sushi',
+					allergy: 'Seafood(Fish), Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 8,
+				},
+				{
+					menu: 'Ikayaki',
+					allergy: 'Wheat, Alcohol, Egg',
+					sauce: 'Teriyaki sauce ; Volcano Sauce',
+					sauceAllergy: 'Wheat, Alcohol, Soy ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 9,
+				},
+				{
+					menu: 'Inari (Bean Cake) sushi',
+					allergy: 'Wheat, Soy, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 9,
+				},
+				{
+					menu: 'Ikura Sushi',
+					allergy: 'Wheat, Seafood(Fish), Seaweed, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 9,
+				},
+				{
+					menu: 'Jay-Mak Roll',
+					allergy: 'Seafood(Fish), Avocado, Seaweed, Wonton Skin, Soy Alcohol, Mayo, Wheat',
+					sauce: 'Sushi Rice ; Chili Volcano Sauce ; Unagi Sauce ; Wonton Skin',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard, Sesame Seed ; Wheat, Alcohol, Sugar, Soy ; Wheat, Egg',
+					mayContain: 'Wonton Seafood(Shellfish, Fish), Dairy',
+					page: 10,
+				},
+				{
+					menu: 'Kinjo Fries',
+					allergy: 'Wheat, Soy, Potato',
+					sauce: 'Ketchup',
+					sauceAllergy: 'Tomato, Sugar, Vinegar',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 11,
+				},
+				{
+					menu: 'Kakiage',
+					allergy: 'Wheat, Soy, Alcohol',
+					sauce: 'Tempura Sauce',
+					sauceAllergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Sesame Seed, Egg',
+					page: 11,
+				},
+				{
+					menu: 'Karaage Donburi',
+					allergy: 'Wheat, Soy, Alcohol, Egg',
+					sauce: 'Volcano Sauce ; Donburi Sauce',
+					sauceAllergy: 'Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Alcohol, Sugar, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Sesame Seed, Egg',
+					page: 11,
+				},
+				{ menu: 'Kimchi', allergy: 'Seafood(Shellfish)', sauce: '', sauceAllergy: '', mayContain: '', page: 11 },
+				{
+					menu: 'Kawari Oshizushi',
+					allergy: 'Seafood(Fish), Avocado, Soy, Wheat, Egg',
+					sauce: 'Sushi Rice ; Mayo ; Ikura',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy',
+					mayContain: '',
+					page: 11,
+				},
+				{
+					menu: 'Kimchi Sashimi',
+					allergy: 'Seafood(Shellfish, Fish), Wheat, Soy, Seaweed, Sesame Seed',
+					sauce: 'Kimchi Sauce',
+					sauceAllergy: 'Seafood(Shellfish, Fish), Soy, Fruit(Apple, Orange)',
+					mayContain: '',
+					page: 11,
+				},
+				{
+					menu: 'Long Bean',
+					allergy: 'Wheat, Seafood(Fish), Sesame seed, Alcohol, Soy',
+					sauce: 'Garlic Sauce',
+					sauceAllergy: 'Wheat, Seafood(Fish), Sesame seed, Alcohol, Soy',
+					mayContain: '',
+					page: 12,
+				},
+				{
+					menu: 'Lobster Roll',
+					allergy: 'Wheat, Seafood(Shellfish), Avocado, Soy, Seaweed, Tobiko, Alcohol, Mayo',
+					sauce: 'Sushi Rice ; Mayo ; Tobiko',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 12,
+				},
+				{
+					menu: 'Lobster Sushi',
+					allergy: 'Seafood(Shellfish), Seaweed, Soy, Alcohol, Mayo',
+					sauce: 'Sushi Rice ; Mayo',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: '',
+					page: 12,
+				},
+				{
+					menu: 'Magic Steak',
+					allergy: 'Wheat, Dairy, Egg, Sesame seed, Soy',
+					sauce: 'Steak Sauce',
+					sauceAllergy: 'Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard',
+					mayContain: '',
+					page: 13,
+				},
+				{
+					menu: 'Miso Black Cod',
+					allergy: 'Egg, Alcohol, Seafood(Fish), Soy',
+					sauce: 'Mayo',
+					sauceAllergy: 'Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Dairy',
+					page: 13,
+				},
+				{
+					menu: 'Minced Pork',
+					allergy: 'Wheat, Alcohol, Pork, Sugar, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 13,
+				},
+				{
+					menu: 'Miso Ramen',
+					allergy: 'Wheat, Egg, Alcohol, Pork, Sesame Seed, Seaweed Sugar, Soy, Fruit( Orange)',
+					sauce: 'Deluxe ; Mini',
+					sauceAllergy:
+						'Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) Egg, Seafood(Fish), Corn ; Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy)',
+					mayContain: 'Chashu : Pork, Sugar, Soy, Wheat Tree nut, Seafood(Shellfish)',
+					page: 13,
+				},
+				{
+					menu: 'Mango Roll',
+					allergy: 'Wheat, Seafood(Shellfish), Avocado, Mango, Soy, Seaweed, Tobiko, Alcohol',
+					sauce: 'Sushi Rice ; Unagi Sauce ; Tobiko ; Mango Sauce',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy ; Wheat, Seafood(Fish), Soy ; Fruit(Mango), Sugar',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 13,
+				},
+				{
+					menu: 'Male Dragon Roll',
+					allergy: 'Wheat, Seafood(Shellfish, Fish), Egg, Seaweed, Soy, Tobiko, Alcohol',
+					sauce: 'Sushi Rice ; Mayo ; Unagi Sauce ; Tobiko ; Ikura',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Alcohol, Sugar, Soy ; Wheat, Seafood(Fish), Soy ; Wheat, Seafood(Fish), Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 13,
+				},
+				{
+					menu: 'Midori Roll',
+					allergy: 'Wheat, Dairy, Alcohol, Soy',
+					sauce: 'Unagi Sauce',
+					sauceAllergy: 'Wheat, Alcohol, Sugar, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 13,
+				},
+				{
+					menu: 'Masago Sushi',
+					allergy: 'Wheat, Seafood(Fish), Seaweed, Soy, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 13,
+				},
+				{
+					menu: 'Macleod Roll',
+					allergy: 'Wheat, Seafood(Fish), Seaweed, Soy, Crunch, Alcohol',
+					sauce: 'Sushi Rice ; Spicy Unagi Sauce',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 13,
+				},
+				{ menu: 'Ramen Noodle', allergy: 'Wheat, Egg, Soy', sauce: '', sauceAllergy: '', mayContain: '', page: 14 },
+				{
+					menu: 'Negi Toro Roll',
+					allergy: 'Seafood(Fish), Seaweed, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: 'Soy',
+					page: 14,
+				},
+				{
+					menu: 'Negi Toro Sushi',
+					allergy: 'Seafood(Fish), Seaweed, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 14,
+				},
+				{
+					menu: 'Okonomiyaki',
+					allergy: 'Wheat, Egg, Seafood(Squid, Tuna), Soy',
+					sauce: 'Takoyaki Sauce ; Mayo',
+					sauceAllergy:
+						'Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 15,
+				},
+				{
+					menu: 'Okonomiyaki (JFC)',
+					allergy: 'Wheat, Seafood(Squid, Tuna, Shellfish), Soy',
+					sauce: 'Takoyaki Sauce ; Mayo',
+					sauceAllergy:
+						'Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy, Egg, Sesame seed',
+					page: 15,
+				},
+				{
+					menu: 'Oyster',
+					allergy: 'Seafood(Shellfish), Wheat',
+					sauce: 'Ponzu Sauce',
+					sauceAllergy: 'Wheat, Fruit(Yuzu), Soy',
+					mayContain: '',
+					page: 15,
+				},
+				{
+					menu: 'Pork Gyoza',
+					allergy: 'Wheat, Alcohol, Pork, Sesame seed, Soy, Seaweed',
+					sauce: 'Japanese Dressing ; Gyoza Sauce',
+					sauceAllergy: 'Wheat, Soy ; Wheat, Alcohol, Sesame seed, Soy',
+					mayContain: '',
+					page: 16,
+				},
+				{
+					menu: 'Potato Cake',
+					allergy: 'Wheat, Soy, Coconut',
+					sauce: 'Takoyaki Sauce',
+					sauceAllergy: 'Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 16,
+				},
+				{
+					menu: 'Pumpkin Potato Cake',
+					allergy: 'Wheat, Soy, Coconut, Sugar, Pumpkin',
+					sauce: 'Takoyaki Sauce',
+					sauceAllergy: 'Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 16,
+				},
+				{
+					menu: 'Philadelphia Roll',
+					allergy: 'Seafood(Fish), Dairy, Seaweed, Sesame Seed, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: 'Soy',
+					page: 16,
+				},
+				{
+					menu: "Peter's Special Roll",
+					allergy: 'Wheat, Seafood(Fish), Egg, Dairy, Soy, Sesame, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 16,
+				},
+				{
+					menu: 'Rack of Lamb',
+					allergy: 'Wheat, Alcohol',
+					sauce: 'Mint Sauce',
+					sauceAllergy: 'Alcohol, Vinegar',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 18,
+				},
+				{
+					menu: 'Red Ramen (Regular)',
+					allergy:
+						'Wheat, Egg, Alcohol, Pork, Sesame Seed, Sesame oil, Seafood(Shellfish, Fish), Fruit(Apple, Orange), Seaweed, Sugar, Soy',
+					sauce: 'Deluxe ; Mini',
+					sauceAllergy:
+						'Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) Egg, Seafood(Fish), Corn ; Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy)',
+					mayContain: 'Chashu : Pork, Sugar, Soy, Wheat Tree nut, Seafood(Shellfish)',
+					page: 18,
+				},
+				{ menu: 'Ra-Yu (Chili Oil)', allergy: 'Seasme Oil', sauce: '', sauceAllergy: '', mayContain: '', page: 18 },
+				{
+					menu: 'Rainbow Roll',
+					allergy: 'Wheat, Seafood(Shellfish, Fish), Seaweed, Soy, Avocado, Tobiko, Alcohol',
+					sauce: 'Sushi Rice ; Tobiko',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Seafood(Fish), Soy',
+					mayContain: '',
+					page: 18,
+				},
+				{
+					menu: 'Red Tuna Sushi',
+					allergy: 'Seafood(Fish), Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 18,
+				},
+				{
+					menu: 'Regular Sashimi',
+					allergy: 'Seafood(Shellfish, Fish), Wheat, Egg, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 18,
+				},
+				{
+					menu: 'Salmon Kama',
+					allergy: '',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 19,
+				},
+				{
+					menu: 'Shrimp Tempura',
+					allergy: 'Seafood(Shellfish), Wheat, Alcohol',
+					sauce: 'Tempura Sauce',
+					sauceAllergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 19,
+				},
+				{
+					menu: 'Squid Legs',
+					allergy: 'Seafood(Shellfish), Wheat, Egg, Soy',
+					sauce: 'Volcano Sauce',
+					sauceAllergy: 'Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 19,
+				},
+				{
+					menu: 'Spring Roll',
+					allergy: 'Wheat, Pork, Egg',
+					sauce: 'Sweet Chilli Sauce',
+					sauceAllergy: 'Sugar, Pepper, Corn Starch',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 19,
+				},
+				{
+					menu: 'Spicy Miso Ramen',
+					allergy: 'Wheat, Egg, Alcohol, Pork, Sesame Seed, Seaweed Sugar, Soy, Fruit( Orange), Sesame Oil',
+					sauce: 'Deluxe ; Mini',
+					sauceAllergy:
+						'Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) Egg, Seafood(Fish), Corn ; Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy)',
+					mayContain: 'Chashu : Pork, Sugar, Soy, Wheat Tree nut, Seafood(Shellfish)',
+					page: 19,
+				},
+				{
+					menu: 'Spicy Tomato Ramen',
+					allergy: 'Wheat, Egg, Tomato, Seaweed, Sugar, Soy, Corn',
+					sauce: 'Deluxe',
+					sauceAllergy: 'Egg, Seafood(Fish), Alcohol, Seaweed',
+					mayContain: '',
+					page: 19,
+				},
+				{
+					menu: 'Steam Rice',
+					allergy: '',
+					sauce: 'Steak Sauce',
+					sauceAllergy: 'Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard',
+					mayContain: '',
+					page: 19,
+				},
+				{
+					menu: 'Seaweed Salad',
+					allergy: 'Wheat, Sesame Seed, Soy, Sesame Oil, Sugar, Alcohol',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 19,
+				},
+				{
+					menu: 'Salmon Roll',
+					allergy: 'Seafood(Fish), Seaweed, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: 'Soy',
+					page: 19,
+				},
+				{
+					menu: 'Spicy Salmon Roll',
+					allergy: 'Seafood(Fish), Seaweed, Soy, Sesame Seed, Alcohol, Egg',
+					sauce: 'Sushi Rice ; Chili Volcano Sauce',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard, Sesame Seed',
+					mayContain: '',
+					page: 19,
+				},
+				{
+					menu: 'Spicy Tuna Roll',
+					allergy: 'Seafood(Fish), Seaweed, Soy, Sesame Seed, Alcohol, Egg',
+					sauce: 'Sushi Rice ; Chili Volcano Sauce',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard, Sesame Seed',
+					mayContain: '',
+					page: 19,
+				},
+				{
+					menu: 'Signature Roll',
+					allergy: 'Wheat, Seafood(Shellfish,Fish), Seaweed, Soy, Mayo, Tobiko, Avocado, Alcohol',
+					sauce: 'Sushi Rice ; Mayo ; Tobiko',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 19,
+				},
+				{
+					menu: 'Spicy Crunch Roll',
+					allergy: 'Wheat, Seafood(Shellfish, Fish), Seaweed, Sesame Seed, Soy, Tobiko, Alcohol, Egg, Dairy',
+					sauce: 'Sushi Rice ; Volcano Sauce ; Crunch',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Sesame Seed, Dairy, Seaweed, Fruit(Orange Peel)',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 19,
+				},
+				{
+					menu: 'Salmon Sushi',
+					allergy: 'Seafood(Fish), Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 19,
+				},
+				{
+					menu: 'Seared Salmon Sushi',
+					allergy: 'Seafood(Fish), Alcohol, Mayo',
+					sauce: 'Sushi Rice ; Volcano Sauce',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: '',
+					page: 19,
+				},
+				{
+					menu: 'Seared Tuna Sushi',
+					allergy: 'Seafood(Fish), Alcohol, Mayo',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 19,
+				},
+				{
+					menu: 'Smoked Salmon Sushi',
+					allergy: 'Seafood(Fish), Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 20,
+				},
+				{
+					menu: 'Scallop Sushi',
+					allergy: 'Seafood(Shellfish, Fish), Alcohol, Egg, Wheat',
+					sauce: 'Sushi Rice ; Mayo ; Unagi Sauce ; Masago',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Alcohol, Sugar, Soy ; Wheat, Seafood(Fish), Soy',
+					mayContain: '',
+					page: 20,
+				},
+				{
+					menu: 'Special Scallop Sushi',
+					allergy: 'Seafood(Shellfish, Fish), Seaweed, Soy, Alcohol, Egg, Wheat',
+					sauce: 'Sushi Rice ; Mayo ; Tobiko',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Seafood(Fish), Soy',
+					mayContain: '',
+					page: 20,
+				},
+				{
+					menu: 'Saba Sushi',
+					allergy: 'Seafood(Fish), Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 20,
+				},
+				{ menu: 'Sushi rice', allergy: 'Contain Soy', sauce: '', sauceAllergy: '', mayContain: '', page: 20 },
+				{
+					menu: 'Teriyaki Beef',
+					allergy: 'Wheat, Dairy, Egg, Alcohol, Sesame seed, Soy',
+					sauce: 'Teriyaki sauce ; Steak Sauce',
+					sauceAllergy: 'Wheat, Alcohol, Soy ; Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard',
+					mayContain: '',
+					page: 21,
+				},
+				{
+					menu: 'Teriyaki Chicken',
+					allergy: 'Wheat, Dairy, Egg, Alcohol, Sesame seed, Soy',
+					sauce: 'Teriyaki sauce ; Steak Sauce',
+					sauceAllergy: 'Wheat, Alcohol, Soy ; Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard',
+					mayContain: '',
+					page: 21,
+				},
+				{
+					menu: 'Takoyaki',
+					allergy: 'Wheat, Soy, Seafood(Shellfish), Egg',
+					sauce: 'Japanese Dressing ; Takoyaki Sauce ; Mayo',
+					sauceAllergy:
+						'Wheat, Soy ; Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 21,
+				},
+				{
+					menu: 'Tako Wasabi',
+					allergy: 'Wheat, Seafood(Shellfish), Alcohol, Soy, Seaweed',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 21,
+				},
+				{
+					menu: 'TanTan Mazemen (Mild)',
+					allergy: 'Wheat, Egg, Seafood(Fish), Alcohol, Pork, Tomato, Seaweed, Sugar, Soy, Corn, Sesame',
+					sauce: 'Topping',
+					sauceAllergy:
+						'Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) ; Crunch, Kale, Green onion, Seaweed, Egg, Minced Pork, Corn',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 21,
+				},
+				{
+					menu: 'TanTan Mazemen (Spicy)',
+					allergy: 'Wheat, Egg, Seafood(Fish), Alcohol, Pork, Tomato, Seaweed, Sugar, Soy, Corn, Sesame',
+					sauce: 'Topping',
+					sauceAllergy:
+						'Minced Pork (Wheat, Alcohol, Pork, Sugar, Soy) ; Crunch, Kale, Green onion, Seaweed, Egg, Minced Pork, Corn',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 21,
+				},
+				{
+					menu: 'Tiger Roll',
+					allergy: 'Seafood(Fish), Avocado, Seaweed, Soy, Masago, Crunch, Alcohol, Dairy, Wheat',
+					sauce: 'Sushi Rice ; Unagi Sauce ; Crunch',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy ; Wheat, Sesame Seed, Dairy, Seaweed, Fruit(Orange Peel)',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 21,
+				},
+				{
+					menu: 'Togarashi Roll',
+					allergy: 'Wheat, Seafood(Fish), Avocado, Seaweed, Soy, Sesame Seed, Tobiko, Alcohol, Egg',
+					sauce: 'Sushi Rice ; Chili Volcano Sauce ; Unagi Sauce ; Sriracha Sauce',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard, Sesame Seed ; Wheat, Alcohol, Sugar, Soy ; Pepper',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 21,
+				},
+				{
+					menu: 'Tai (Red Snapper) Sushi',
+					allergy: 'Seafood(Fish), Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 21,
+				},
+				{
+					menu: 'Tamago Sushi',
+					allergy: 'Wheat, Egg, Soy, Seafood(Fish), Seaweed, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 21,
+				},
+				{
+					menu: 'Tako (Octopus) Sushi',
+					allergy: 'Seafood(Shellfish), Seaweed, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 21,
+				},
+				{
+					menu: 'Tobiko Sushi',
+					allergy: 'Wheat, Seafood(Fish), Seaweed, Soy, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 21,
+				},
+				{
+					menu: 'Toro Sushi',
+					allergy: 'Seafood(Fish), Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 21,
+				},
+				{
+					menu: 'Tuna Sushi',
+					allergy: 'Seafood(Fish), Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: '',
+					page: 21,
+				},
+				{
+					menu: 'Tuna Roll',
+					allergy: 'Seafood(Fish), Seaweed, Alcohol',
+					sauce: 'Sushi Rice',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu)',
+					mayContain: 'Soy',
+					page: 21,
+				},
+				{ menu: 'Udon Noodle', allergy: 'Wheat', sauce: '', sauceAllergy: '', mayContain: '', page: 22 },
+				{
+					menu: 'Unagi Roll',
+					allergy: 'Wheat, Seafood(Fish), Seaweed, Soy, Sesame Seed, Alcohol',
+					sauce: 'Sushi Rice ; Unagi Sauce',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy',
+					mayContain: '',
+					page: 22,
+				},
+				{
+					menu: 'Unagi Sushi',
+					allergy: 'Wheat, Seafood(Fish), Seaweed, Sesame Seed, Soy, Alcohol',
+					sauce: 'Sushi Rice ; Unagi Sauce',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Alcohol, Sugar, Soy',
+					mayContain: '',
+					page: 22,
+				},
+				{
+					menu: 'Waffle Sweet Potato',
+					allergy: 'Soy, Egg',
+					sauce: 'Volcano Sauce',
+					sauceAllergy: 'Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 23,
+				},
+				{
+					menu: 'Veggie Gyoza',
+					allergy: 'Wheat, Alcohol, Sesame seed, Soy, Seaweed',
+					sauce: 'Japanese Dressing ; Gyoza Sauce',
+					sauceAllergy: 'Wheat, Soy ; Wheat, Alcohol, Sesame seed, Soy',
+					mayContain: '',
+					page: 24,
+				},
+				{
+					menu: 'Veggie Tomato Ramen',
+					allergy: 'Wheat, Egg, Tomato, Seaweed, Sugar, Soy, Corn',
+					sauce: 'Deluxe',
+					sauceAllergy: 'Egg, Seafood(Fish), Alcohol, Seaweed',
+					mayContain: '',
+					page: 24,
+				},
+				{
+					menu: 'Volcano Roll',
+					allergy: 'Wheat, Seafood(Shellfish, Fish), Seaweed, Soy, Sesame Seed, Alcohol, Egg',
+					sauce: 'Sushi Rice ; Volcano Sauce',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 24,
+				},
+				{
+					menu: 'Vegetable Roll',
+					allergy: 'Wheat, Avocado, Seaweed, Soy, Alcohol, Egg',
+					sauce: 'Sushi Rice ; Mayo ; Unagi Sauce',
+					sauceAllergy:
+						'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard ; Wheat, Alcohol, Sugar, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 24,
+				},
+				{
+					menu: 'Yam Tempura',
+					allergy: 'Wheat, Seafood(Fish), Alcohol',
+					sauce: 'Tempura Sauce',
+					sauceAllergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 26,
+				},
+				{
+					menu: 'Yum Fries',
+					allergy: 'Wheat, Soy, Sugar, Egg',
+					sauce: 'Volcano Sauce',
+					sauceAllergy: 'Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy, Soy',
+					page: 26,
+				},
+				{
+					menu: 'Yam Roll',
+					allergy: 'Wheat, Avocado, Seaweed, Soy, Sesame Seed, Alcohol, Egg',
+					sauce: 'Sushi Rice ; Mayo',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					mayContain: 'Seafood(Shellfish, Fish), Dairy',
+					page: 26,
+				},
+				{
+					menu: 'Yuzu Ahi Sushi',
+					allergy: 'Wheat, Soy, Seafood(Fish), Alcohol',
+					sauce: 'Sushi Rice ; Yuzu Dressing',
+					sauceAllergy: 'Alcohol, Sugar, Seaweed(Konbu) ; Wheat, Fruit(Yuzu), Soy',
+					mayContain: '',
+					page: 26,
+				},
+				{
+					menu: 'Bacon Cream (Pasta Sauce)',
+					allergy: 'Wheat, Seafood(Shellfish), Dairy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Bolognese (Pasta Sauce)',
+					allergy: 'Wheat, Alcohol, Pork, Soy, Tomato, Dairy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Chili pepper powder',
+					allergy: 'Fruit(Orange Peel), Sesame Seed, Seaweed',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Chili Volcano',
+					allergy: 'Egg, Alcohol, Sesame Seed, Seaweed, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{ menu: 'Dashinomoto', allergy: 'Seafood(Fish), Dairy', sauce: '', sauceAllergy: '', mayContain: '', page: 28 },
+				{
+					menu: 'Donburi sauce',
+					allergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{ menu: 'Fish Sauce', allergy: 'Seafood(Fish), Soy', sauce: '', sauceAllergy: '', mayContain: '', page: 28 },
+				{
+					menu: 'Garlic Sauce',
+					allergy: 'Wheat, Seafood(Shellfish), Sesame Seed, Sesame Oil, Alcohol, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Ginger sauce',
+					allergy: 'Fruit(Mango), Pepper',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Gochujang mixed',
+					allergy: 'Wheat, Alcohol, Sesame Oil, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Gyoza sauce',
+					allergy: 'Wheat, Alcohol, Sesame Seed, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Hoisin sauce',
+					allergy: 'Wheat, Alcohol, Sesame Seed, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Japanese dressing',
+					allergy: 'Wheat, Fruit(Grapefruit), Soy, Mustard, Wasabi',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Kimchi sauce',
+					allergy: 'Wheat, Seafood(Shellfish, Fish), Fruit(Apple,Orange), Seaweed, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Mint sauce',
+					allergy: 'Alcohol, Fruit(Watermelon)',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{ menu: 'Miso paste', allergy: 'Alcohol, Soy', sauce: '', sauceAllergy: '', mayContain: '', page: 28 },
+				{
+					menu: 'Miso Black cod sauce',
+					allergy: 'Alcohol, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{ menu: 'Mirin', allergy: 'Alcohol', sauce: '', sauceAllergy: '', mayContain: '', page: 28 },
+				{
+					menu: 'Mayo',
+					allergy: 'Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Mango sauce',
+					allergy: 'Fruit(Mango), Alcohol, Sesame Seed',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Miso base (Miso ramen base)',
+					allergy: 'Soy, Fruit(Orange)',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Oyster sauce',
+					allergy: 'Wheat, Seafood(Shellfish)',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Ponzu (Yuzu) sauce',
+					allergy: 'Wheat, Fruit(Yuzu), Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Poke Sauce',
+					allergy: 'Wheat, Sesame Oil, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{
+					menu: 'Rice vinegar mixed',
+					allergy: 'Alcohol, Seaweed(Konbu)',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 28,
+				},
+				{ menu: 'Sushi Vinegar (Marukan vinegar)', allergy: '', sauce: '', sauceAllergy: '', mayContain: '', page: 28 },
+				{ menu: 'Soy sauce', allergy: 'Wheat, Soy', sauce: '', sauceAllergy: '', mayContain: '', page: 28 },
+				{ menu: 'Tabasco Sriracha', allergy: '', sauce: '', sauceAllergy: '', mayContain: '', page: 29 },
+				{ menu: 'Sweet chili sauce', allergy: 'Pepper', sauce: '', sauceAllergy: '', mayContain: '', page: 29 },
+				{
+					menu: 'Salad dressing',
+					allergy: 'Egg, Sesame Seed, Seaweed, Soy, Fruit(Orange)',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Sesame dressing',
+					allergy: 'Soy, Sesame Seed, Wheat, Egg, Mustart',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Steak Sauce',
+					allergy: 'Wheat, Dairy, Egg, Sesame seed, Soy, Garlic, Mustard',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Seafood Sauce',
+					allergy: 'Egg, Alcohol, Fruit(Lemon), Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Spicy BBQ Fried Chicken',
+					allergy: '',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Wheat, Seafood(Fish), Soy, Dairy, Egg, Seafood(Shelfish), Peanut',
+					page: 29,
+				},
+				{
+					menu: 'Teriyaki sauce',
+					allergy: 'Wheat, Alcohol, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Tempura Sauce',
+					allergy: 'Wheat, Seafood(Fish), Alcohol, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Takoyaki Sauce (Katsu Sauce - JFC)',
+					allergy: 'Wheat, Soy, Sugar, Fruits(Apple, Peach), Vinegar',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Tonkatsu (Black ramen base)',
+					allergy: 'Alcohol, Fruit(Apple), Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Tomato ramen base',
+					allergy: 'Wheat, Tomato, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{ menu: 'Tabasco sauce', allergy: 'Pepper', sauce: '', sauceAllergy: '', mayContain: '', page: 29 },
+				{
+					menu: 'Unagi sauce mixed',
+					allergy: 'Wheat, Alcohol, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{ menu: 'Ultra Spicy Sauce', allergy: 'Wheat, Soy', sauce: '', sauceAllergy: '', mayContain: '', page: 29 },
+				{
+					menu: 'Volcano Sauce',
+					allergy: 'Egg, Fruit(Lemon), Vinegar, Corn, Soy, Mustard',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{ menu: 'Vegetable oil spray', allergy: 'Soy', sauce: '', sauceAllergy: '', mayContain: '', page: 29 },
+				{
+					menu: 'Yuzu Dressing',
+					allergy: 'Wheat, Fruit(Yuzu), Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'New Unagi sauce K4 Only',
+					allergy: 'Wheat, Alcohol, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Spicy Unagi sauce K4 Only',
+					allergy: 'Wheat, Alcohol, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Gomae Sauce K1 Only',
+					allergy: 'Sesame Seed, Seafood(Fish), Wheat',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{ menu: 'Smoky BBQ Sauce', allergy: '', sauce: '', sauceAllergy: '', mayContain: '', page: 29 },
+				{ menu: 'Yellow Mustard', allergy: '', sauce: '', sauceAllergy: '', mayContain: '', page: 29 },
+				{
+					menu: 'Honey Mustard Sauce (Chicken)',
+					allergy: 'Mustard, Tomato, Egg, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 29,
+				},
+				{
+					menu: 'Corn Syrup',
+					allergy: '',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Sesame Seed, Wheat, Soy, Seafood(Fish), Dairy',
+					page: 29,
+				},
+				{
+					menu: 'Soy Garlic Sauce (Chicken)',
+					allergy: '',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Soy Sesame, Seafood(Fish), Dairy',
+					page: 30,
+				},
+				{ menu: 'Gochujang', allergy: 'Wheat, Soy, Alcohol', sauce: '', sauceAllergy: '', mayContain: '', page: 30 },
+				{
+					menu: 'Mango Flower Ice Cream',
+					allergy: 'Dairy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Wheat, Egg, Sesame Seed, Tree nuts, Peanut, Soy, Sulphite',
+					page: 31,
+				},
+				{
+					menu: 'Coconut Surprise Ice Cream',
+					allergy: 'Dairy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Wheat, Egg, Sesame Seed, Tree nuts, Peanut, Soy, Sulphite',
+					page: 31,
+				},
+				{
+					menu: 'Green Tea Ice Cream',
+					allergy: 'Dairy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Wheat, Egg, Sesame Seed, Tree nuts, Peanut, Soy, Sulphite',
+					page: 31,
+				},
+				{
+					menu: 'Pear Ice Ice Cream',
+					allergy: 'Dairy, Egg, Almonds, Soy',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Wheat, Peanuts, Tree nuts, Sesame Seed, Sulphite',
+					page: 31,
+				},
+				{
+					menu: 'Vanilla Ice Cream',
+					allergy: 'Dairy, Egg',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: 'Wheat, Sesame, Tree nuts, Peanuts, Soy, Sulphite',
+					page: 31,
+				},
+				{
+					menu: 'Donut Fries',
+					allergy: 'Dairy, Egg, Soy, Wheat',
+					sauce: '',
+					sauceAllergy: '',
+					mayContain: '',
+					page: 31,
+				},
+				{ menu: 'Peters #1', allergy: 'Dairy, Egg, Soy, Wheat', sauce: '', sauceAllergy: '', mayContain: '', page: 31 },
+			]
+			let currentFilter = ''
+			function getTagClass(word) {
+				const w = String(word).toLowerCase()
+				if (w.includes('wheat') || w.includes('gluten')) return 'tag-wheat'
+				if (w.includes('egg')) return 'tag-egg'
+				if (w.includes('dairy') || w.includes('milk') || w.includes('cream')) return 'tag-dairy'
+				if (w.includes('soy')) return 'tag-soy'
+				if (w.includes('shellfish')) return 'tag-shellfish'
+				if (w.includes('seafood')) return 'tag-seafood'
+				if (
+					w.includes('fish') ||
+					w.includes('tuna') ||
+					w.includes('salmon') ||
+					w.includes('cod') ||
+					w.includes('saba') ||
+					w.includes('hamachi') ||
+					w.includes('snapper')
+				)
+					return 'tag-fish'
+				if (w.includes('sesame')) return 'tag-sesame'
+				if (w.includes('peanut')) return 'tag-peanut'
+				if (w.includes('tree nut') || w.includes('tree nuts') || w.includes('almond') || w.includes('nuts'))
+					return 'tag-tree-nut'
+				if (w.includes('alcohol') || w.includes('mirin')) return 'tag-alcohol'
+				if (w.includes('lemon')) return 'tag-lemon'
+				if (
+					w.includes('fruit') ||
+					w.includes('apple') ||
+					w.includes('orange') ||
+					w.includes('mango') ||
+					w.includes('yuzu') ||
+					w.includes('peach') ||
+					w.includes('grapefruit') ||
+					w.includes('watermelon') ||
+					w.includes('raspberry')
+				)
+					return 'tag-fruit'
+				if (w.includes('mustard')) return 'tag-mustard'
+				if (w.includes('sulphite') || w.includes('sulfite')) return 'tag-sulphite'
+				return 'tag-default'
+			}
+			function splitItems(text) {
+				if (!text) return []
+				return String(text)
+					.split(/,|;/)
+					.map((x) => cleanTagText(x))
+					.filter(Boolean)
+			}
+			function cleanTagText(text) {
+				return (
+					String(text || '')
+						.trim()
+						// When text like "Seafood(Shellfish, Fish)" is split by comma, it can create "Fish)".
+						// This removes only unmatched closing brackets while keeping normal text like "Seafood(Fish)".
+						.replace(/^[)]*/, '')
+						.replace(/\)+$/g, function (match, offset, fullText) {
+							return fullText.includes('(') ? match : ''
+						})
+						.trim()
+				)
+			}
+			function makeTags(text, type = 'normal') {
+				const items = splitItems(text)
+				if (!items.length) return 'N/A'
+				const extraClass = type === 'sauceAllergy' ? ' sauce-tag' : ''
+				return items
+					.map((item) => `<span class="allergy-tag${extraClass} ${getTagClass(item)}">${escapeHtml(item)}</span>`)
+					.join('')
+			}
+			function escapeHtml(str) {
+				return String(str).replace(
+					/[&<>'"]/g,
+					(c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c])
+				)
+			}
+			function normalizeText(str) {
+				return String(str || '')
+					.toLowerCase()
+					.replace(/[^a-z0-9]+/g, ' ')
+					.trim()
+			}
+			function itemText(item) {
+				return [item.menu, item.allergy, item.sauce, item.sauceAllergy, item.mayContain].join(' ').toLowerCase()
+			}
+			function getSearchScore(item, searchText, searchWords) {
+				if (!searchText) return 0
 
-  document.getElementById("resultCount").textContent = `Results: ${filtered.length} / ${allergyData.length}`;
-  const resultsDiv = document.getElementById("results");
-  if (!filtered.length) { resultsDiv.innerHTML = `<div class="no-result">No result found.</div>`; return; }
-  resultsDiv.innerHTML = filtered.map(item => {
-    const isExactMenuMatch = rawSearchText && normalizeText(item.menu) === normalizeText(rawSearchText);
-    return `
+				const query = normalizeText(searchText)
+				const menu = normalizeText(item.menu)
+				const sauce = normalizeText(item.sauce)
+				const allergy = normalizeText(item.allergy)
+				const sauceAllergy = normalizeText(item.sauceAllergy)
+				const mayContain = normalizeText(item.mayContain)
+
+				if (menu === query) return 1000 // exact full menu name, e.g. Ikura Sushi
+				if (menu.startsWith(query)) return 800 // menu starts with query
+				if (menu.includes(query)) return 650 // query appears inside menu name
+				if (sauce.includes(query)) return 450
+				if (allergy.includes(query)) return 300
+				if (sauceAllergy.includes(query)) return 250
+				if (mayContain.includes(query)) return 200
+
+				return searchWords.length ? 100 : 0
+			}
+			function renderResults() {
+				const rawSearchText = document.getElementById('searchInput').value.trim()
+				const searchText = rawSearchText.toLowerCase()
+				const searchWords = searchText.split(/\s+/).filter(Boolean)
+				const filtered = allergyData
+					.filter((item) => {
+						const keywords = itemText(item)
+						const matchesSearch = searchWords.every((word) => keywords.includes(word))
+						const matchesFilter = currentFilter === '' || keywords.includes(currentFilter.toLowerCase())
+						return matchesSearch && matchesFilter
+					})
+					.map((item, index) => ({ item, index, score: getSearchScore(item, rawSearchText, searchWords) }))
+					.sort((a, b) => b.score - a.score || a.index - b.index)
+					.map((result) => result.item)
+
+				document.getElementById('resultCount').textContent = `Results: ${filtered.length} / ${allergyData.length}`
+				const resultsDiv = document.getElementById('results')
+				if (!filtered.length) {
+					resultsDiv.innerHTML = `<div class="no-result">No result found.</div>`
+					return
+				}
+				resultsDiv.innerHTML = filtered
+					.map((item) => {
+						const isExactMenuMatch = rawSearchText && normalizeText(item.menu) === normalizeText(rawSearchText)
+						return `
     <div class="card">
-      <div class="menu-name">${escapeHtml(item.menu)}${isExactMenuMatch ? `<span class="exact-match-badge">Exact Menu Match</span>` : ""}</div>
+      <div class="menu-name">${escapeHtml(item.menu)}${
+							isExactMenuMatch ? `<span class="exact-match-badge">Exact Menu Match</span>` : ''
+						}</div>
       <div class="row"><span class="label">Menu Allergy:</span>${makeTags(item.allergy)}</div>
       <div class="row"><span class="label">Sauce / Topping:</span>${makeTags(item.sauce)}</div>
-      <div class="row sauce-allergy-row"><span class="label">Sauce Allergy:</span>${makeTags(item.sauceAllergy, "sauceAllergy")}</div>
-      ${item.mayContain ? `<div class="warning"><span class="label">May Contain:</span>${makeTags(item.mayContain)}</div>` : ""}
-      <div class="source-page">PDF page: ${item.page || "N/A"}</div>
-    </div>`;
-  }).join("");
-}
-function filterByAllergy(allergy) {
-  currentFilter = allergy;
-  // Clear the search field when using a filter button, so keyword search and filter do not conflict.
-  document.getElementById("searchInput").value = "";
-  document.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.classList.remove("active");
-    if (btn.textContent.toLowerCase().includes(allergy.toLowerCase()) || (allergy==='Wheat' && btn.textContent.toLowerCase().includes('gluten'))) btn.classList.add("active");
-  });
-  renderResults();
-}
-function clearFilters() {
-  currentFilter = "";
-  document.getElementById("searchInput").value = "";
-  document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
-  renderResults();
-}
-document.getElementById("searchInput").addEventListener("input", renderResults);
-renderResults();
-</script>
-</body>
+      <div class="row sauce-allergy-row"><span class="label">Sauce Allergy:</span>${makeTags(
+				item.sauceAllergy,
+				'sauceAllergy'
+			)}</div>
+      ${
+				item.mayContain
+					? `<div class="warning"><span class="label">May Contain:</span>${makeTags(item.mayContain)}</div>`
+					: ''
+			}
+      <div class="source-page">PDF page: ${item.page || 'N/A'}</div>
+    </div>`
+					})
+					.join('')
+			}
+			function filterByAllergy(allergy) {
+				currentFilter = allergy
+				// Clear the search field when using a filter button, so keyword search and filter do not conflict.
+				document.getElementById('searchInput').value = ''
+				document.querySelectorAll('.filter-btn').forEach((btn) => {
+					btn.classList.remove('active')
+					if (
+						btn.textContent.toLowerCase().includes(allergy.toLowerCase()) ||
+						(allergy === 'Wheat' && btn.textContent.toLowerCase().includes('gluten'))
+					)
+						btn.classList.add('active')
+				})
+				renderResults()
+			}
+			function clearFilters() {
+				currentFilter = ''
+				document.getElementById('searchInput').value = ''
+				document.querySelectorAll('.filter-btn').forEach((btn) => btn.classList.remove('active'))
+				renderResults()
+			}
+			document.getElementById('searchInput').addEventListener('input', renderResults)
+			renderResults()
+		</script>
+	</body>
 </html>
